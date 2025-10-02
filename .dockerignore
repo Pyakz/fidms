@@ -1,19 +1,23 @@
 # Node / Bun dependencies
+# We keep these ignored to prevent local, heavy node_modules folders 
+# from being copied into the build context.
 node_modules
 **/node_modules
-bun.lockb
 
 # Build output
+# Keep these ignored unless the build process needs to see previous output.
 client/dist
 server/dist
 shared/dist
 
-# Logs
+# Logs and temporary files
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+tmp/
+temp/
 
 # OS files
 .DS_Store
@@ -27,6 +31,6 @@ Thumbs.db
 .vscode
 .idea
 
-# Docker
+# Docker files
 Dockerfile
 .dockerignore
