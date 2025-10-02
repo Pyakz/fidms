@@ -9,7 +9,7 @@ import inventory from "./routes/inventory";
 const api = new Hono().route("/inventory", inventory);
 
 const app = new Hono()
-  .use(cors())
+
   .use(logger())
   .use(trimTrailingSlash())
   .use(poweredBy({ serverName: "FIDMS Server" }))
