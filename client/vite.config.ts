@@ -28,7 +28,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         // Key: requests starting with /api will be proxied
-        target: "http://localhost:3000", // Target backend server
+        target: "http://localhost:3000/api", // Target backend server
         changeOrigin: true, // Rewrites the Host header to match the target
         rewrite: (path) => path.replace(/^\/api/, ""), // Optional: remove /api prefix from the request path
       },

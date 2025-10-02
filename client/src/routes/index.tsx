@@ -12,7 +12,7 @@ function Index() {
   const { mutate: sendRequest } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await honoClient.api.inventory.items.$get();
+        const res = await honoClient.inventory.items.$get();
         if (!res.ok) {
           console.log("Error fetching data");
           return;
