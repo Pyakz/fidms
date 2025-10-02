@@ -6,7 +6,9 @@ import { trimTrailingSlash } from "hono/trailing-slash";
 import { poweredBy } from "hono/powered-by";
 import inventory from "./routes/inventory";
 
-const api = new Hono().route("/inventory", inventory);
+const api = new Hono()
+  .notFound((c) => c.json({ message: "Not Founds" }, 404))
+  .route("/inventory", inventory);
 
 const app = new Hono()
   .use(cors())
@@ -17,9 +19,7 @@ const app = new Hono()
   .route("/api", api);
 
 app.use("*", serveStatic({ root: "./static" }));
-app.get("*", async (c, next) => {
-  return serveStatic({ root: "./static", path: "index.html" })(c, next);
-});
+app.get("*", serveStatic({ root: "./static", path: "index.html" }));
 
 export default app;
 export type AppType = typeof app;
