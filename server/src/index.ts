@@ -6,9 +6,7 @@ import { trimTrailingSlash } from "hono/trailing-slash";
 import { poweredBy } from "hono/powered-by";
 import inventory from "./routes/inventory";
 
-const api = new Hono()
-  .get("/", (c) => c.json({ message: "Hello from API!" }))
-  .route("/inventory", inventory);
+const api = new Hono().route("/inventory", inventory);
 
 const app = new Hono()
   .use(cors())
