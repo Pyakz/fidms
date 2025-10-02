@@ -1,0 +1,32 @@
+# Node / Bun dependencies
+node_modules
+**/node_modules
+bun.lockb
+
+# Build output
+client/dist
+server/dist
+shared/dist
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Editor / IDE
+.vscode
+.idea
+
+# Docker
+Dockerfile
+.dockerignore
