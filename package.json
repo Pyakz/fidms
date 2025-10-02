@@ -42,9 +42,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@tanstack/devtools-vite": "^0.3.3",
-    "@tanstack/react-devtools": "^0.7.1",
-    "@tanstack/react-query-devtools": "^5.90.2",
     "hono": "^4.9.9"
   }
 }

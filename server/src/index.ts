@@ -3,15 +3,14 @@ import { serveStatic } from "hono/bun";
 import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { poweredBy } from "hono/powered-by";
-import inventory from "./routes/inventory";
-
-const api = new Hono().route("/inventory", inventory);
+import api from "./routes";
+// import { sentry } from "@hono/sentry";
 
 const app = new Hono()
-
   .use(logger())
   .use(trimTrailingSlash())
   .use(poweredBy({ serverName: "FIDMS Server" }))
+  // .use("*", sentry())
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/api", api);
 
