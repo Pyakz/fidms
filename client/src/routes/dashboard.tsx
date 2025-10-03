@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "@/lib/auth";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/dashboard")({
 
 function RouteComponent() {
   const { data, isPending, error } = useSession();
-
+  const navigate = useNavigate();
   if (!data?.user) {
     return <div>Access Denied</div>;
   }
@@ -26,7 +26,18 @@ function RouteComponent() {
       <div>Hello {data.user.name}</div>
       <Button
         onClick={async () => {
-          signOut();
+          await signOut({
+            fetchOptions: {
+              onSuccess: () => {
+                navigate({
+                  to: "/",
+                  params: {
+                    marky: "was here",
+                  },
+                });
+              },
+            },
+          });
         }}
       >
         Signout

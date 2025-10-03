@@ -108,6 +108,7 @@ export default function SignIn() {
               "justify-between flex-col"
             )}
           >
+            {}
             <Button
               variant="outline"
               className={cn("w-full gap-2")}
@@ -116,7 +117,7 @@ export default function SignIn() {
                 await signIn.social(
                   {
                     provider: "google",
-                    callbackURL: "/dashboard",
+                    callbackURL: `${window.location.origin}/dashboard`,
                   },
                   {
                     onRequest: () => {
