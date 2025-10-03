@@ -4,13 +4,15 @@ import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { poweredBy } from "hono/powered-by";
 import api from "./routes";
+import { showRoutes } from "hono/dev";
+// import { cors } from "hono/cors";
 // import { sentry } from "@hono/sentry";
 
 const app = new Hono()
   .use(logger())
+  // .use(cors())
   .use(trimTrailingSlash())
   .use(poweredBy({ serverName: "FIDMS Server" }))
-  // .use("*", sentry())
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/api", api);
 
@@ -19,11 +21,15 @@ if (process.env.NODE_ENV === "production") {
     .use("*", serveStatic({ root: "./static" }))
     .get("*", serveStatic({ root: "./static", path: "index.html" }));
 } else {
-  app.get("*", (c) => c.text("Development mode: No static files served"));
+  app.get("*", (c) => c.text("Welcome to FIDMS API"));
 }
 
-// .use("*", serveStatic({ root: "./static" }))
-// .get("*", serveStatic({ root: "./static", path: "index.html" }));
-
+showRoutes(app);
 export type AppType = typeof api;
-export default app;
+
+const server = Bun.serve({
+  port: Number(process.env.PORT) || 3000,
+  fetch: app.fetch,
+});
+
+console.log(`Server started on http://localhost:${server.port}`);

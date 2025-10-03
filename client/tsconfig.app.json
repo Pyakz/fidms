@@ -20,6 +20,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@server/*": ["../server/src/*"]
     }
   },

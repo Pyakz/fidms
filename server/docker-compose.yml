@@ -1,0 +1,23 @@
+version: "3.8"
+name: fidms
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: fidms
+      POSTGRES_PASSWORD: fidms_password
+      POSTGRES_USER: fidms_user
+    ports:
+      - 5435:5432
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    networks:
+      - fidms_local_network
+    restart: on-failure:3
+
+networks:
+  fidms_local_network:
+
+volumes:
+  postgres_db:
