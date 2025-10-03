@@ -6,6 +6,7 @@ export const auth = betterAuth({
   appName: "FIDMS",
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
   },
   socialProviders: {
     google: {

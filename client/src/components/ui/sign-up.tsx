@@ -15,8 +15,10 @@ import { useState } from "react";
 import { Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { signUp } from "@/lib/auth";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -152,7 +154,7 @@ export default function SignUp() {
                 password,
                 name: `${firstName} ${lastName}`,
                 image: image ? await convertImageToBase64(image) : "",
-                callbackURL: `/dashboard`,
+                callbackURL: `${window.location.origin}/dashboard`,
                 fetchOptions: {
                   onResponse: () => {
                     setLoading(false);
@@ -164,7 +166,10 @@ export default function SignUp() {
                     toast.error(ctx.error.message);
                   },
                   onSuccess: async () => {
-                    // router.push("/dashboard");
+                    navigate({
+                      to: "/dashboard",
+                    });
+                    toast.success("Account created successfully!");
                   },
                 },
               });

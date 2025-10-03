@@ -83,6 +83,7 @@ export default function SignIn() {
                 {
                   email,
                   password,
+                  callbackURL: `${window.location.origin}/dashboard`,
                 },
                 {
                   onRequest: () => {
