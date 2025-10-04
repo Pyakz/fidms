@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
 import "./styles/index.css";
 import MantineProvider from "./providers/Mantine";
+import { ColorSchemeScript } from "@mantine/core";
 
 const queryClient = new QueryClient();
 // Create a new router instance
@@ -37,6 +38,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
+      <ColorSchemeScript defaultColorScheme="dark" />
       <MantineProvider>
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
