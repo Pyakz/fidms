@@ -9,24 +9,49 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteImport } from './routes/_app'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicSignUpRouteImport } from './routes/_public/sign-up'
+import { Route as PublicSignInRouteImport } from './routes/_public/sign-in'
+import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
+import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
-import { Route as publicSignUpRouteImport } from './routes/(public)/sign-up'
-import { Route as publicSignInRouteImport } from './routes/(public)/sign-in'
-import { Route as publicForgotPasswordRouteImport } from './routes/(public)/forgot-password'
-import { Route as publicAboutRouteImport } from './routes/(public)/about'
 
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicSignUpRoute = PublicSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicSignInRoute = PublicSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicAboutRoute = PublicAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => PublicRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -43,104 +68,89 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
-const publicSignUpRoute = publicSignUpRouteImport.update({
-  id: '/(public)/sign-up',
-  path: '/sign-up',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const publicSignInRoute = publicSignInRouteImport.update({
-  id: '/(public)/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const publicForgotPasswordRoute = publicForgotPasswordRouteImport.update({
-  id: '/(public)/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const publicAboutRoute = publicAboutRouteImport.update({
-  id: '/(public)/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof publicAboutRoute
-  '/forgot-password': typeof publicForgotPasswordRoute
-  '/sign-in': typeof publicSignInRoute
-  '/sign-up': typeof publicSignUpRoute
   '/dashboard': typeof AppDashboardRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/about': typeof PublicAboutRoute
+  '/forgot-password': typeof PublicForgotPasswordRoute
+  '/sign-in': typeof PublicSignInRoute
+  '/sign-up': typeof PublicSignUpRoute
+  '/': typeof PublicIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof publicAboutRoute
-  '/forgot-password': typeof publicForgotPasswordRoute
-  '/sign-in': typeof publicSignInRoute
-  '/sign-up': typeof publicSignUpRoute
   '/dashboard': typeof AppDashboardRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/about': typeof PublicAboutRoute
+  '/forgot-password': typeof PublicForgotPasswordRoute
+  '/sign-in': typeof PublicSignInRoute
+  '/sign-up': typeof PublicSignUpRoute
+  '/': typeof PublicIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
-  '/(public)/about': typeof publicAboutRoute
-  '/(public)/forgot-password': typeof publicForgotPasswordRoute
-  '/(public)/sign-in': typeof publicSignInRoute
-  '/(public)/sign-up': typeof publicSignUpRoute
+  '/_public': typeof PublicRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_public/about': typeof PublicAboutRoute
+  '/_public/forgot-password': typeof PublicForgotPasswordRoute
+  '/_public/sign-in': typeof PublicSignInRoute
+  '/_public/sign-up': typeof PublicSignUpRoute
+  '/_public/': typeof PublicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/dashboard'
+    | '/profile'
+    | '/settings'
     | '/about'
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
-    | '/dashboard'
-    | '/profile'
-    | '/settings'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/dashboard'
+    | '/profile'
+    | '/settings'
     | '/about'
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
-    | '/dashboard'
-    | '/profile'
-    | '/settings'
+    | '/'
   id:
     | '__root__'
-    | '/'
     | '/_app'
-    | '/(public)/about'
-    | '/(public)/forgot-password'
-    | '/(public)/sign-in'
-    | '/(public)/sign-up'
+    | '/_public'
     | '/_app/dashboard'
     | '/_app/profile'
     | '/_app/settings'
+    | '/_public/about'
+    | '/_public/forgot-password'
+    | '/_public/sign-in'
+    | '/_public/sign-up'
+    | '/_public/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
-  publicAboutRoute: typeof publicAboutRoute
-  publicForgotPasswordRoute: typeof publicForgotPasswordRoute
-  publicSignInRoute: typeof publicSignInRoute
-  publicSignUpRoute: typeof publicSignUpRoute
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -148,12 +158,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/sign-up': {
+      id: '/_public/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof PublicSignUpRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/sign-in': {
+      id: '/_public/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof PublicSignInRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/forgot-password': {
+      id: '/_public/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof PublicForgotPasswordRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/about': {
+      id: '/_public/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicAboutRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -176,34 +214,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
-    '/(public)/sign-up': {
-      id: '/(public)/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof publicSignUpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(public)/sign-in': {
-      id: '/(public)/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof publicSignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(public)/forgot-password': {
-      id: '/(public)/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof publicForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(public)/about': {
-      id: '/(public)/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof publicAboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -221,13 +231,28 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface PublicRouteChildren {
+  PublicAboutRoute: typeof PublicAboutRoute
+  PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
+  PublicSignInRoute: typeof PublicSignInRoute
+  PublicSignUpRoute: typeof PublicSignUpRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicAboutRoute: PublicAboutRoute,
+  PublicForgotPasswordRoute: PublicForgotPasswordRoute,
+  PublicSignInRoute: PublicSignInRoute,
+  PublicSignUpRoute: PublicSignUpRoute,
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
-  publicAboutRoute: publicAboutRoute,
-  publicForgotPasswordRoute: publicForgotPasswordRoute,
-  publicSignInRoute: publicSignInRoute,
-  publicSignUpRoute: publicSignUpRoute,
+  PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

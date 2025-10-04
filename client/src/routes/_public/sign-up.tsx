@@ -17,7 +17,7 @@ import { BETTER_AUTH_ERROR_CODES } from "@/lib/enums";
 import GoogleLogo from "@/components/GoogleLogo";
 import { useDisclosure } from "@mantine/hooks";
 
-export const Route = createFileRoute("/(public)/sign-up")({
+export const Route = createFileRoute("/_public/sign-up")({
   component: SignUp,
 });
 
@@ -71,7 +71,8 @@ function SignUp() {
             }
           }
         },
-        onSuccess: () => navigate({ to: "/dashboard" }),
+        onSuccess: () =>
+          navigate({ to: "/dashboard", reloadDocument: true, replace: true }),
       }
     );
 
@@ -164,5 +165,3 @@ function SignUp() {
     </Center>
   );
 }
-
-export default SignUp;

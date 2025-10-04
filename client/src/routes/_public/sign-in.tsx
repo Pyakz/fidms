@@ -18,7 +18,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { z } from "zod";
 import { sessionQuery } from "@/lib/queryOptions";
 
-export const Route = createFileRoute("/(public)/sign-in")({
+export const Route = createFileRoute("/_public/sign-in")({
   // check if user is already logged in, if so redirect to dashboard
   beforeLoad: async ({ context: { queryClient } }) => {
     const session = await queryClient.ensureQueryData(sessionQuery);
@@ -29,7 +29,6 @@ export const Route = createFileRoute("/(public)/sign-in")({
     }
     return { session };
   },
-
   validateSearch: z.object({
     redirect: z.string().catch("").optional().nullable(),
   }),
@@ -61,8 +60,8 @@ function SignIn() {
     },
   });
 
-  const handleSubmit = async (values: typeof form.values) => {
-    await signIn.email(
+  const handleSubmit = (values: typeof form.values) =>
+    signIn.email(
       {
         email: values.email,
         password: values.password,
@@ -89,7 +88,6 @@ function SignIn() {
         },
       }
     );
-  };
 
   return (
     <Center className="h-screen">
@@ -145,7 +143,7 @@ function SignIn() {
             signIn.social(
               {
                 provider: "google",
-                callbackURL: redirect || `${window.location.origin}/dashboard`,
+                callbackURL: `${window.location.origin}${redirect || "/dashboard"}`,
               },
               {
                 onRequest: (ctx) => {
@@ -158,6 +156,7 @@ function SignIn() {
                   console.log("onError", ctx);
                 },
                 onSuccess: (ctx) => {
+                  // alert(`${window.location.origin}${redirect || "/dashboard"}`);
                   console.log("onSuccess", ctx);
                 },
               }
@@ -181,5 +180,3 @@ function SignIn() {
     </Center>
   );
 }
-
-export default SignIn;

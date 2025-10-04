@@ -1,6 +1,14 @@
 import { signOut } from "@/lib/auth";
 import { sessionQuery } from "@/lib/queryOptions";
-import { Alert, AppShell, Burger, Button, Center, Loader } from "@mantine/core";
+import {
+  Alert,
+  AppShell,
+  Burger,
+  Button,
+  Center,
+  Loader,
+  LoadingOverlay,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -16,7 +24,7 @@ export const Route = createFileRoute("/_app")({
   beforeLoad: async ({ location, context: { queryClient } }) => {
     const session = await queryClient.ensureQueryData(sessionQuery);
     if (!session.data?.user) {
-      queryClient.invalidateQueries();
+      queryClient.clear();
       throw redirect({
         to: "/sign-in",
         search: {
@@ -43,6 +51,7 @@ export const Route = createFileRoute("/_app")({
 function LayoutComponent() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [visible, { open, close }] = useDisclosure(false);
 
   const [opened, { toggle }] = useDisclosure();
 
@@ -56,6 +65,11 @@ function LayoutComponent() {
         collapsed: { mobile: !opened },
       }}
     >
+      <LoadingOverlay
+        visible={visible}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
       <AppShell.Header>
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
 
@@ -79,10 +93,17 @@ function LayoutComponent() {
             onClick={() =>
               signOut({
                 fetchOptions: {
+                  onError: close,
+                  onRequest: open,
                   onSuccess: () => {
-                    navigate({ to: "/sign-in" });
+                    queryClient.clear();
+                    close();
+                    navigate({
+                      to: "/sign-in",
+                      reloadDocument: true,
+                      replace: true,
+                    });
                   },
-                  onRequest: () => queryClient.clear(),
                 },
               })
             }
