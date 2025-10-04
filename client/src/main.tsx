@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import "./styles/index.css";
+import "./styles/theme.css";
+
 import MantineProvider from "./providers/Mantine";
 import { ColorSchemeScript } from "@mantine/core";
 

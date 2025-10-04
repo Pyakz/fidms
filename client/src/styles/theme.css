@@ -14,7 +14,7 @@ Checkbox .mantine-Checkbox-root {
     &:disabled {
       opacity: 0.5;
 
-      & + .mantine-Checkbox-icon {
+      & +.mantine-Checkbox-icon {
         opacity: 0.5;
         color: var(--checkbox-icon-color);
       }
