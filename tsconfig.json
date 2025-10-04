@@ -36,5 +36,13 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
-  }
+  },
+  "exclude": [
+    "client/dist",
+    "client/assets",
+    "server/dist",
+    "shared/dist",
+    "client/eslint.config.js",
+    "client/postcss.config.cjs"
+  ]
 }
