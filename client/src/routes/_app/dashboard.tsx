@@ -1,16 +1,13 @@
 import { useSession } from "@/lib/auth";
+import { Center } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/_app/dashboard")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { data, isPending, error } = useSession();
-
-  if (!data?.user) {
-    return <div>Access Denied</div>;
-  }
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -20,9 +17,15 @@ function RouteComponent() {
     return <div>Error: {error.message}</div>;
   }
 
+  if (!data?.user) {
+    return <div>Access Denied</div>;
+  }
+
   return (
-    <div className="">
-      <div>Hello {data.user.name}</div>
-    </div>
+    <Center className="h-screen">
+      <pre>
+        <code>{JSON.stringify(data?.user, null, 2)}</code>
+      </pre>
+    </Center>
   );
 }

@@ -10,6 +10,7 @@ coverage
 # production
 dist
 build
+.tanstack
 
 # misc
 .DS_Store

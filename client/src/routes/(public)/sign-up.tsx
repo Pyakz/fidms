@@ -17,7 +17,7 @@ import { BETTER_AUTH_ERROR_CODES } from "@/lib/enums";
 import GoogleLogo from "@/components/GoogleLogo";
 import { useDisclosure } from "@mantine/hooks";
 
-export const Route = createFileRoute("/(auth)/sign-up")({
+export const Route = createFileRoute("/(public)/sign-up")({
   component: SignUp,
 });
 
@@ -26,10 +26,10 @@ function SignUp() {
   const [visible, { open, close }] = useDisclosure(false);
   const form = useForm({
     initialValues: {
-      firstName: "d",
-      lastName: "d",
-      email: "t@g.com",
-      password: "asdasdasdasdasd",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
     },
     validate: {
       firstName: isNotEmpty("Required"),
@@ -50,14 +50,8 @@ function SignUp() {
         callbackURL: `${window.location.origin}/dashboard`,
       },
       {
-        onRequest: () => {
-          console.log("1.onRequest");
-          open();
-        },
-        onResponse: () => {
-          console.log("2.onResponse");
-          close();
-        },
+        onRequest: open,
+        onResponse: close,
         onError: (ctx) => {
           if (ctx.error) {
             const errorFieldMap: Record<string, "email" | "password"> = {
@@ -147,12 +141,8 @@ function SignUp() {
                 callbackURL: `${window.location.origin}/dashboard`,
               },
               {
-                onRequest: () => {
-                  open();
-                },
-                onResponse: () => {
-                  close();
-                },
+                onRequest: open,
+                onResponse: close,
               }
             );
           }}
@@ -163,7 +153,7 @@ function SignUp() {
         <Text c="dimmed" size="sm" className="text-center">
           Already have an account?{" "}
           <Link
-            to="/"
+            to="/sign-in"
             className="font-semibold"
             style={{ textDecoration: "none" }}
           >

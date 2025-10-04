@@ -1,4 +1,4 @@
-import { InputError, MantineProvider as Provider } from "@mantine/core";
+import { InputError, Loader, MantineProvider as Provider } from "@mantine/core";
 import { themeCssVariableResolver } from "./cssVariableResolver";
 import { Notifications } from "@mantine/notifications";
 import { theme } from "./theme";
@@ -17,6 +17,11 @@ const MantineProvider = ({ children }: { children: React.ReactNode }) => {
               style: {
                 textAlign: "end",
               },
+            },
+          }),
+          Loader: Loader.extend({
+            defaultProps: {
+              type: "dots",
             },
           }),
         },
