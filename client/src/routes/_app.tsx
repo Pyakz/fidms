@@ -1,3 +1,4 @@
+import ThemeToggler from "@/components/ThemeToggler";
 import { signOut } from "@/lib/auth";
 import { sessionQuery } from "@/lib/queryOptions";
 import {
@@ -108,6 +109,7 @@ function LayoutComponent() {
             <IconChevronRight size={14} stroke={1.5} />
           </Group>
         </div>
+        <ThemeToggler />
 
         <Link to="/dashboard" preload="intent">
           Dashboard
