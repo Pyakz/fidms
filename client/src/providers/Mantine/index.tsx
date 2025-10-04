@@ -1,4 +1,4 @@
-import { MantineProvider as Provider } from "@mantine/core";
+import { InputError, MantineProvider as Provider } from "@mantine/core";
 import { themeCssVariableResolver } from "./cssVariableResolver";
 import { Notifications } from "@mantine/notifications";
 import { theme } from "./theme";
@@ -8,8 +8,20 @@ import "./theme.css";
 const MantineProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Provider
-      theme={theme}
-      defaultColorScheme="auto"
+      theme={{
+        ...theme,
+        components: {
+          ...theme.components,
+          InputError: InputError.extend({
+            defaultProps: {
+              style: {
+                textAlign: "end",
+              },
+            },
+          }),
+        },
+      }}
+      defaultColorScheme="light"
       cssVariablesResolver={themeCssVariableResolver}
     >
       <Notifications position="top-right" />

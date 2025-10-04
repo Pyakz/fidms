@@ -4,11 +4,17 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "db:up": "docker compose up -d",
-    "db:down": "docker compose down",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "db:migrate": "bunx drizzle-kit migrate",
+    "db:generate": "bunx drizzle-kit generate",
+    "db:push": "bunx drizzle-kit push",
+    "db:pull": "bunx drizzle-kit introspect",
     "build": "tsc",
-    "dev": "bun run db:up && bun --watch run src/index.ts && tsc --watch",
-    "studio": "bunx drizzle-kit studio"
+    "dev": "bun run docker:up && bun --watch run src/index.ts && tsc --watch",
+    "studio": "bunx drizzle-kit studio",
+    "auth:generate": "bunx @better-auth/cli generate --output ./src/db/schemas/auth.ts",
+    "auth:migrate": "bunx drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/sentry": "^1.2.2",
@@ -16,7 +22,8 @@
     "drizzle-orm": "^0.44.6",
     "hono": "^4.7.11",
     "pg": "^8.16.3",
-    "shared": "workspace:*"
+    "shared": "workspace:*",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   Box,
   Button,
   Center,
   Divider,
+  Group,
   LoadingOverlay,
   PasswordInput,
   Text,
@@ -11,73 +12,74 @@ import {
 } from "@mantine/core";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { signIn } from "@/lib/auth";
+import { signIn, signUp } from "@/lib/auth";
 import { BETTER_AUTH_ERROR_CODES } from "@/lib/enums";
 import GoogleLogo from "@/components/GoogleLogo";
 import { useDisclosure } from "@mantine/hooks";
 
-export const Route = createFileRoute("/")({
-  component: Index,
-  head: () => ({
-    meta: [
-      {
-        title: "FIDMS - Flexible Intelligent Dealership Management System",
-      },
-      {
-        name: "description",
-        content: "FIDMS - Flexible Intelligent Dealership Management System",
-      },
-    ],
-  }),
+export const Route = createFileRoute("/(auth)/sign-up")({
+  component: SignUp,
 });
 
-function Index() {
+function SignUp() {
+  const navigate = useNavigate();
   const [visible, { open, close }] = useDisclosure(false);
-
   const form = useForm({
     initialValues: {
-      email: "",
-      password: "",
+      firstName: "d",
+      lastName: "d",
+      email: "t@g.com",
+      password: "asdasdasdasdasd",
     },
     validate: {
+      firstName: isNotEmpty("Required"),
+      lastName: isNotEmpty("Required"),
       email: isNotEmpty("Required"),
       password: isNotEmpty("Required"),
     },
   });
 
-  const handleSubmit = async (values: typeof form.values) => {
-    await signIn.email(
+  const handleSubmit = (values: typeof form.values) =>
+    signUp.email(
       {
+        name: `${values.firstName} ${values.lastName}`,
+        firstName: values.firstName,
+        lastName: values.lastName,
         email: values.email,
         password: values.password,
         callbackURL: `${window.location.origin}/dashboard`,
       },
       {
         onRequest: () => {
+          console.log("1.onRequest");
           open();
         },
         onResponse: () => {
+          console.log("2.onResponse");
           close();
         },
         onError: (ctx) => {
           if (ctx.error) {
             const errorFieldMap: Record<string, "email" | "password"> = {
-              [BETTER_AUTH_ERROR_CODES.EMAIL_NOT_VERIFIED]: "email",
-              [BETTER_AUTH_ERROR_CODES.USER_NOT_FOUND]: "email",
+              [BETTER_AUTH_ERROR_CODES.PASSWORD_TOO_LONG]: "password",
+              [BETTER_AUTH_ERROR_CODES.PASSWORD_TOO_SHORT]: "password",
+              [BETTER_AUTH_ERROR_CODES.USER_ALREADY_EXISTS]: "email",
               [BETTER_AUTH_ERROR_CODES.INVALID_EMAIL]: "email",
-              [BETTER_AUTH_ERROR_CODES.INVALID_EMAIL_OR_PASSWORD]: "password",
-              [BETTER_AUTH_ERROR_CODES.INVALID_PASSWORD]: "password",
-              [BETTER_AUTH_ERROR_CODES.FAILED_TO_CREATE_SESSION]: "password",
+              [BETTER_AUTH_ERROR_CODES.FAILED_TO_CREATE_USER]: "email",
+              [BETTER_AUTH_ERROR_CODES.FAILED_TO_CREATE_SESSION]: "email",
+              [BETTER_AUTH_ERROR_CODES.USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL]:
+                "email",
             };
+
             const field = errorFieldMap[ctx.error.code];
             if (field) {
               form.setFieldError(field, ctx.error.message);
             }
           }
         },
+        onSuccess: () => navigate({ to: "/dashboard" }),
       }
     );
-  };
 
   return (
     <Center className="h-screen">
@@ -89,12 +91,31 @@ function Index() {
       <form className="space-y-3 p-5" onSubmit={form.onSubmit(handleSubmit)}>
         <Box>
           <Text fw="bold" size="lg">
-            Sign In
+            Sign Up
           </Text>
           <Text c="dimmed" fz="sm">
-            Enter your email below to login to your account
+            Enter your information to create an account
           </Text>
         </Box>
+
+        <Group grow>
+          <TextInput
+            withAsterisk
+            label="First Name"
+            required
+            placeholder="Mark"
+            {...form.getInputProps("firstName")}
+          />
+
+          <TextInput
+            withAsterisk
+            label="Last Name"
+            required
+            placeholder="Doe"
+            {...form.getInputProps("lastName")}
+          />
+        </Group>
+
         <TextInput
           withAsterisk
           leftSection={<IconMail size={15} />}
@@ -104,24 +125,14 @@ function Index() {
           placeholder="mark@example.com"
           {...form.getInputProps("email")}
         />
-        <Box className="space-y-2">
-          <PasswordInput
-            withAsterisk
-            leftSection={<IconLock size={15} />}
-            label="Password"
-            {...form.getInputProps("password")}
-          />
-          <Link
-            to="/forgot-password"
-            className="text-sm"
-            style={{ textDecoration: "none" }}
-          >
-            Forgot Password?
-          </Link>
-        </Box>
-
+        <PasswordInput
+          withAsterisk
+          leftSection={<IconLock size={15} />}
+          label="Password"
+          {...form.getInputProps("password")}
+        />
         <Button fullWidth type="submit">
-          Login
+          Create Account
         </Button>
         <Divider label="Or continue with" />
 
@@ -136,17 +147,11 @@ function Index() {
                 callbackURL: `${window.location.origin}/dashboard`,
               },
               {
-                onRequest: (ctx) => {
-                  console.log("onRequest", ctx);
+                onRequest: () => {
+                  open();
                 },
-                onResponse: (ctx) => {
-                  console.log("onResponse", ctx);
-                },
-                onError: (ctx) => {
-                  console.log("onError", ctx);
-                },
-                onSuccess: (ctx) => {
-                  console.log("onSuccess", ctx);
+                onResponse: () => {
+                  close();
                 },
               }
             );
@@ -156,13 +161,13 @@ function Index() {
         </Button>
 
         <Text c="dimmed" size="sm" className="text-center">
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <Link
-            to="/sign-up"
+            to="/"
             className="font-semibold"
             style={{ textDecoration: "none" }}
           >
-            Sign Up
+            Sign In
           </Link>
         </Text>
       </form>
@@ -170,4 +175,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default SignUp;
