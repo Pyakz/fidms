@@ -1,23 +1,11 @@
 import { signOut } from "@/lib/auth";
 import { sessionQuery } from "@/lib/queryOptions";
-import {
-  Alert,
-  AppShell,
-  Burger,
-  Button,
-  Center,
-  Loader,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Alert, Button, Center, Loader, LoadingOverlay } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
+import { Fragment } from "react/jsx-runtime";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
@@ -53,69 +41,100 @@ function LayoutComponent() {
   const queryClient = useQueryClient();
   const [visible, { open, close }] = useDisclosure(false);
 
-  const [opened, { toggle }] = useDisclosure();
+  // const [opened, { toggle }] = useDisclosure();
 
   return (
-    <AppShell
-      padding="md"
-      header={{ height: 60 }}
-      navbar={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { mobile: !opened },
-      }}
-    >
+    <Fragment>
       <LoadingOverlay
         visible={visible}
         zIndex={1000}
         overlayProps={{ radius: "sm", blur: 2 }}
       />
-      <AppShell.Header>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-
-        <div>Logo</div>
-      </AppShell.Header>
-
-      <AppShell.Navbar>
-        <Link to="/dashboard" preload="intent">
-          Dashboard
-        </Link>
-        <br />
-        <Link to="/profile" preload="intent">
-          Profile
-        </Link>
-        <br />
-        <Link to="/settings" preload="intent">
-          Settings
-        </Link>
-        <div className="p-5">
-          <Button
-            onClick={() =>
-              signOut({
-                fetchOptions: {
-                  onError: close,
-                  onRequest: open,
-                  onSuccess: () => {
-                    queryClient.clear();
-                    close();
-                    navigate({
-                      to: "/sign-in",
-                      reloadDocument: true,
-                      replace: true,
-                    });
-                  },
-                },
-              })
-            }
-          >
-            Logout
-          </Button>
-        </div>
-      </AppShell.Navbar>
-
-      <AppShell.Main>
+      <Center>
         <Outlet />
-      </AppShell.Main>
-    </AppShell>
+        <Button
+          onClick={() =>
+            signOut({
+              fetchOptions: {
+                onError: close,
+                onRequest: open,
+                onSuccess: () => {
+                  queryClient.clear();
+                  close();
+                  navigate({
+                    to: "/sign-in",
+                    reloadDocument: true,
+                    replace: true,
+                  });
+                },
+              },
+            })
+          }
+        >
+          Logout
+        </Button>
+      </Center>
+    </Fragment>
+    // <AppShell
+    //   padding="md"
+    //   header={{ height: 60 }}
+    //   navbar={{
+    //     width: 300,
+    //     breakpoint: "sm",
+    //     collapsed: { mobile: !opened },
+    //   }}
+    // >
+    // <LoadingOverlay
+    //   visible={visible}
+    //   zIndex={1000}
+    //   overlayProps={{ radius: "sm", blur: 2 }}
+    // />
+    //   <AppShell.Header>
+    //     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+
+    //     <div>Logo</div>
+    //   </AppShell.Header>
+
+    //   <AppShell.Navbar>
+    //     <Link to="/dashboard" preload="intent">
+    //       Dashboard
+    //     </Link>
+    //     <br />
+    //     <Link to="/profile" preload="intent">
+    //       Profile
+    //     </Link>
+    //     <br />
+    //     <Link to="/settings" preload="intent">
+    //       Settings
+    //     </Link>
+    //     <div className="p-5">
+    // <Button
+    //   onClick={() =>
+    //     signOut({
+    //       fetchOptions: {
+    //         onError: close,
+    //         onRequest: open,
+    //         onSuccess: () => {
+    //           queryClient.clear();
+    //           close();
+    //           navigate({
+    //             to: "/sign-in",
+    //             reloadDocument: true,
+    //             replace: true,
+    //           });
+    //         },
+    //       },
+    //     })
+    //   }
+    // >
+    //   Logout
+    // </Button>
+    //     </div>
+    //   </AppShell.Navbar>
+
+    //   <AppShell.Main>
+    //     <Outlet />
+    //   </AppShell.Main>
+    // </AppShell>
   );
 }

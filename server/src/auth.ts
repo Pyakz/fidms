@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import dbClient from "./db";
-import { openAPI } from "better-auth/plugins";
+import { lastLoginMethod, openAPI } from "better-auth/plugins";
 
 export const auth = betterAuth({
   appName: "FIDMS",
@@ -40,7 +40,7 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins: ["http://localhost:5173"],
-  plugins: [openAPI()],
+  plugins: [openAPI(), lastLoginMethod()],
 });
 
 export type AuthType = {

@@ -48,6 +48,9 @@ export const Route = createFileRoute("/_public/sign-in")({
 
 function SignIn() {
   const [visible, { open, close }] = useDisclosure(false);
+  const [visibleGoogle, { open: openGoogle, close: closeGoogle }] =
+    useDisclosure(false);
+
   const { redirect } = Route.useSearch();
   const form = useForm({
     initialValues: {
@@ -139,6 +142,7 @@ function SignIn() {
           fullWidth
           variant="default"
           leftSection={<GoogleLogo />}
+          loading={visibleGoogle}
           onClick={() =>
             signIn.social(
               {
@@ -146,19 +150,10 @@ function SignIn() {
                 callbackURL: `${window.location.origin}${redirect || "/dashboard"}`,
               },
               {
-                onRequest: (ctx) => {
-                  console.log("onRequest", ctx);
-                },
-                onResponse: (ctx) => {
-                  console.log("onResponse", ctx);
-                },
-                onError: (ctx) => {
-                  console.log("onError", ctx);
-                },
-                onSuccess: (ctx) => {
-                  // alert(`${window.location.origin}${redirect || "/dashboard"}`);
-                  console.log("onSuccess", ctx);
-                },
+                onRequest: openGoogle,
+                onResponse: closeGoogle,
+                onError: closeGoogle,
+                onSuccess: closeGoogle,
               }
             )
           }

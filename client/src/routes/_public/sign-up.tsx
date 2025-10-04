@@ -24,6 +24,9 @@ export const Route = createFileRoute("/_public/sign-up")({
 function SignUp() {
   const navigate = useNavigate();
   const [visible, { open, close }] = useDisclosure(false);
+  const [visibleGoogle, { open: openGoogle, close: closeGoogle }] =
+    useDisclosure(false);
+
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -126,7 +129,7 @@ function SignUp() {
           label="Password"
           {...form.getInputProps("password")}
         />
-        <Button fullWidth type="submit">
+        <Button fullWidth type="submit" loading={visible}>
           Create Account
         </Button>
         <Divider label="Or continue with" />
@@ -135,18 +138,21 @@ function SignUp() {
           fullWidth
           variant="default"
           leftSection={<GoogleLogo />}
-          onClick={async () => {
-            await signIn.social(
+          loading={visibleGoogle}
+          onClick={() =>
+            signIn.social(
               {
                 provider: "google",
                 callbackURL: `${window.location.origin}/dashboard`,
               },
               {
-                onRequest: open,
-                onResponse: close,
+                onRequest: openGoogle,
+                onResponse: closeGoogle,
+                onError: closeGoogle,
+                onSuccess: closeGoogle,
               }
-            );
-          }}
+            )
+          }
         >
           Sign up with Google
         </Button>
