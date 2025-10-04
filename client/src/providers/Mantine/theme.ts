@@ -1,4 +1,3 @@
-import { shadcnCssVariableResolver } from "@/cssVariableResolver";
 import {
   ActionIcon,
   Alert,
@@ -29,7 +28,6 @@ import {
   ThemeIcon,
   Timeline,
   Tooltip,
-  MantineProvider as Provider,
 } from "@mantine/core";
 
 const CONTAINER_SIZES: Record<string, string> = {
@@ -68,6 +66,7 @@ const slateColors: MantineColorsTuple = [
   "#020817",
   "#64748B",
 ];
+
 const grayColors: MantineColorsTuple = [
   "#f9fafb",
   "#f3f4f6",
@@ -329,7 +328,7 @@ const pinkColors: MantineColorsTuple = [
   "#EC4899",
 ];
 
-export const shadcnTheme: MantineThemeOverride = createTheme({
+export const theme: MantineThemeOverride = createTheme({
   colors: {
     slate: slateColors,
     gray: grayColors,
@@ -358,9 +357,9 @@ export const shadcnTheme: MantineThemeOverride = createTheme({
     fuchsia: fuchsiaColors,
     pink: pinkColors,
 
-    primary: zincColors,
-    secondary: zincColors,
-    dark: zincColors,
+    primary: blueColors,
+    secondary: slateColors,
+    dark: slateColors,
 
     error: redColors as MantineColorsTuple,
     success: greenColors,
@@ -370,18 +369,18 @@ export const shadcnTheme: MantineThemeOverride = createTheme({
   focusRing: "never",
   scale: 1,
   primaryColor: "primary",
-  primaryShade: { light: 8, dark: 0 },
+  primaryShade: { light: 6, dark: 5 },
   autoContrast: true,
   luminanceThreshold: 0.3,
-  //   fontFamily: "Geist",
+  // fontFamily: "Geist",
   radius: {
-    xs: rem("6px"),
-    sm: rem("8px"),
-    md: rem("12px"),
-    lg: rem("16px"),
+    xs: rem("4px"),
+    sm: rem("7px"),
+    md: rem("11px"),
+    lg: rem("15px"),
     xl: rem("24px"),
   },
-  defaultRadius: "sm",
+  defaultRadius: "xs",
   spacing: {
     "4xs": rem("2px"),
     "3xs": rem("4px"),
@@ -449,7 +448,7 @@ export const shadcnTheme: MantineThemeOverride = createTheme({
 
   cursorType: "pointer",
   other: {
-    style: "shadcn",
+    style: "theme",
   },
   components: {
     Container: Container.extend({
@@ -937,22 +936,8 @@ export const shadcnTheme: MantineThemeOverride = createTheme({
     }),
     Paper: Paper.extend({
       defaultProps: {
-        shadow: "xl",
+        shadow: "xs",
       },
     }),
   },
 });
-
-const MantineProvider = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <Provider
-      theme={shadcnTheme}
-      //   defaultColorScheme="dark"
-      cssVariablesResolver={shadcnCssVariableResolver}
-    >
-      {children}
-    </Provider>
-  );
-};
-
-export default MantineProvider;

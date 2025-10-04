@@ -76,7 +76,7 @@ If you wanted to add a database to Hono you can do so with a multitude of Typesc
 
 ### Client
 
-bhvr uses Vite + React Typescript template, which means you can build your frontend just as you would with any other React app. This makes it flexible to add UI components like [shadcn/ui](https://ui.shadcn.com) or routing using [React Router](https://reactrouter.com/start/declarative/installation).
+bhvr uses Vite + React Typescript template, which means you can build your frontend just as you would with any other React app. This makes it flexible to add UI components like [MantineUI](https://ui.shadcn.com) or routing using [React Router](https://reactrouter.com/start/declarative/installation).
 
 ```
 client
