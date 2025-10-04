@@ -3,13 +3,17 @@ import { sessionQuery } from "@/lib/queryOptions";
 import {
   Alert,
   AppShell,
+  Avatar,
   Burger,
   Button,
   Center,
+  Group,
   Loader,
   LoadingOverlay,
+  Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { IconChevronRight } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   createFileRoute,
@@ -34,6 +38,9 @@ export const Route = createFileRoute("/_app")({
     }
     return { session };
   },
+  loader: ({ context: { session } }) => {
+    return { session };
+  },
   pendingComponent: () => (
     <Center className="h-screen">
       <Loader />
@@ -51,6 +58,8 @@ export const Route = createFileRoute("/_app")({
 function LayoutComponent() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { session } = Route.useLoaderData();
   const [visible, { open, close }] = useDisclosure(false);
 
   const [opened, { toggle }] = useDisclosure();
@@ -76,18 +85,41 @@ function LayoutComponent() {
         <div>Logo</div>
       </AppShell.Header>
 
-      <AppShell.Navbar>
+      <AppShell.Navbar className="space-y-4">
+        <div className="p-2">
+          <Group gap={8}>
+            <Avatar
+              src={session.data?.user.image ?? undefined}
+              name={session.data?.user.name ?? undefined}
+              alt={session.data?.user.name ?? undefined}
+              radius={2}
+            />
+
+            <div style={{ flex: 1 }}>
+              <Text size="sm" fw={500}>
+                Harriette Spoonlicker
+              </Text>
+
+              <Text c="dimmed" size="xs">
+                hspoonlicker@outlook.com
+              </Text>
+            </div>
+
+            <IconChevronRight size={14} stroke={1.5} />
+          </Group>
+        </div>
+
         <Link to="/dashboard" preload="intent">
           Dashboard
         </Link>
-        <br />
         <Link to="/profile" preload="intent">
           Profile
         </Link>
-        <br />
+
         <Link to="/settings" preload="intent">
           Settings
         </Link>
+
         <div className="p-5">
           <Button
             onClick={() =>
