@@ -328,7 +328,7 @@ const pinkColors: MantineColorsTuple = [
   "#EC4899",
 ];
 
-export const theme: MantineThemeOverride = createTheme({
+export const externaltheme: MantineThemeOverride = createTheme({
   colors: {
     slate: slateColors,
     gray: grayColors,
@@ -941,3 +941,5 @@ export const theme: MantineThemeOverride = createTheme({
     }),
   },
 });
+
+
