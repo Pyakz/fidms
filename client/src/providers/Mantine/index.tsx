@@ -26,7 +26,9 @@ const MantineProvider = ({ children }: { children: React.ReactNode }) => {
           }),
         },
       }}
-      defaultColorScheme="light"
+      defaultColorScheme={
+        import.meta.env.NODE_ENV === "production" ? "auto" : "dark"
+      }
       cssVariablesResolver={themeCssVariableResolver}
     >
       <Notifications position="top-right" />
