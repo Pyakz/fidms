@@ -1,8 +1,21 @@
-@layer theme, base, components, utilities;
+@tailwind components;
+@tailwind utilities;
+
+@layer tailwind {
+  @tailwind base;
+}
+
 @import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
 @import "@mantine/core/styles.css";
 @import "tw-animate-css";
+
+:root[data-mantine-color-scheme="dark"] {
+  --border-default-color: var(--mantine-color-dark-5);
+}
+
+:root[data-mantine-color-scheme="light"] {
+  --border-default-color: var(--mantine-color-gray-2);
+}
 
 *,
 ::before,

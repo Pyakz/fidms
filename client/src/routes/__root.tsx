@@ -7,6 +7,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { QueryClient } from "@tanstack/react-query";
+import { Alert, Center, Loader } from "@mantine/core";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -20,6 +21,18 @@ export const Route = createRootRouteWithContext<{
       </div>
     );
   },
+  pendingComponent: () => (
+    <Center className="h-screen">
+      <Loader />
+    </Center>
+  ),
+  errorComponent: ({ error }) => (
+    <Center className="h-screen">
+      <Alert variant="light" color="rgba(255, 0, 0, 1)" title="Error">
+        {error.message}
+      </Alert>
+    </Center>
+  ),
 });
 
 function RootComponent() {

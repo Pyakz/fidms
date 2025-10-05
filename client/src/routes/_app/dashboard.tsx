@@ -1,6 +1,5 @@
 import { useSession } from "@/lib/auth";
-import { Avatar, Center, Group, Paper, Text } from "@mantine/core";
-import { IconChevronRight } from "@tabler/icons-react";
+import { Paper } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/dashboard")({
@@ -22,29 +21,23 @@ function RouteComponent() {
     return <div>Access Denied</div>;
   }
   return (
-    <Center className="h-screen">
-      <Paper withBorder p={10}>
-        <Group gap={8}>
-          <Avatar
-            src={data.user.image ?? undefined}
-            name={data.user.name ?? undefined}
-            alt={data.user.name ?? undefined}
-            radius={2}
-          />
-
-          <div style={{ flex: 1 }}>
-            <Text size="sm" fw={500}>
-              Harriette Spoonlicker
-            </Text>
-
-            <Text c="dimmed" size="xs">
-              hspoonlicker@outlook.com
-            </Text>
-          </div>
-
-          <IconChevronRight size={14} stroke={1.5} />
-        </Group>
+    <div className="grid grid-cols-4 gap-3">
+      <div className="border-2 border-indigo-600 h-23">2</div>
+      <div className="border-2 border-indigo-600 h-23">3</div>
+      <div className="border-4 border-indigo-600 h-23">4</div>
+      <div className="border-8 border-indigo-600 h-23">5</div>
+      <Paper withBorder className="col-span-1 h-36 p-3">
+        Paper
       </Paper>
-    </Center>
+      <Paper withBorder className="col-span-1 h-36 p-3">
+        Paper
+      </Paper>
+      <Paper withBorder className="col-span-1 h-36 p-3">
+        Paper
+      </Paper>
+      <Paper withBorder className="col-span-1 h-36 p-3">
+        Paper
+      </Paper>
+    </div>
   );
 }

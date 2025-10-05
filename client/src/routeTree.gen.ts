@@ -19,6 +19,8 @@ import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppInventoryMotorcyclesRouteImport } from './routes/_app/inventory/motorcycles'
+import { Route as AppInventoryCarsRouteImport } from './routes/_app/inventory/cars'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -68,6 +70,16 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventoryMotorcyclesRoute = AppInventoryMotorcyclesRouteImport.update({
+  id: '/inventory/motorcycles',
+  path: '/inventory/motorcycles',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryCarsRoute = AppInventoryCarsRouteImport.update({
+  id: '/inventory/cars',
+  path: '/inventory/cars',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
@@ -78,6 +90,8 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof PublicSignInRoute
   '/sign-up': typeof PublicSignUpRoute
   '/': typeof PublicIndexRoute
+  '/inventory/cars': typeof AppInventoryCarsRoute
+  '/inventory/motorcycles': typeof AppInventoryMotorcyclesRoute
 }
 export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
@@ -88,6 +102,8 @@ export interface FileRoutesByTo {
   '/sign-in': typeof PublicSignInRoute
   '/sign-up': typeof PublicSignUpRoute
   '/': typeof PublicIndexRoute
+  '/inventory/cars': typeof AppInventoryCarsRoute
+  '/inventory/motorcycles': typeof AppInventoryMotorcyclesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,6 +117,8 @@ export interface FileRoutesById {
   '/_public/sign-in': typeof PublicSignInRoute
   '/_public/sign-up': typeof PublicSignUpRoute
   '/_public/': typeof PublicIndexRoute
+  '/_app/inventory/cars': typeof AppInventoryCarsRoute
+  '/_app/inventory/motorcycles': typeof AppInventoryMotorcyclesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,6 +131,8 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/'
+    | '/inventory/cars'
+    | '/inventory/motorcycles'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/dashboard'
@@ -123,6 +143,8 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/'
+    | '/inventory/cars'
+    | '/inventory/motorcycles'
   id:
     | '__root__'
     | '/_app'
@@ -135,6 +157,8 @@ export interface FileRouteTypes {
     | '/_public/sign-in'
     | '/_public/sign-up'
     | '/_public/'
+    | '/_app/inventory/cars'
+    | '/_app/inventory/motorcycles'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -214,6 +238,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/motorcycles': {
+      id: '/_app/inventory/motorcycles'
+      path: '/inventory/motorcycles'
+      fullPath: '/inventory/motorcycles'
+      preLoaderRoute: typeof AppInventoryMotorcyclesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/cars': {
+      id: '/_app/inventory/cars'
+      path: '/inventory/cars'
+      fullPath: '/inventory/cars'
+      preLoaderRoute: typeof AppInventoryCarsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -221,12 +259,16 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppInventoryCarsRoute: typeof AppInventoryCarsRoute
+  AppInventoryMotorcyclesRoute: typeof AppInventoryMotorcyclesRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppInventoryCarsRoute: AppInventoryCarsRoute,
+  AppInventoryMotorcyclesRoute: AppInventoryMotorcyclesRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

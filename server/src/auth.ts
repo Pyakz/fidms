@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, uuidv7 } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import dbClient from "./db";
 import { lastLoginMethod, openAPI } from "better-auth/plugins";
@@ -25,6 +25,11 @@ export const auth = betterAuth({
   database: drizzleAdapter(dbClient, {
     provider: "pg",
   }),
+  advanced: {
+    database: {
+      generateId: false,
+    },
+  },
   user: {
     additionalFields: {
       firstName: {

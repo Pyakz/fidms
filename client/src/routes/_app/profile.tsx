@@ -22,7 +22,7 @@ function RouteComponent() {
   }
 
   return (
-    <Center className="h-screen">
+    <Center>
       <pre>
         <code>{JSON.stringify(data?.user, null, 2)}</code>
       </pre>

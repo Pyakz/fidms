@@ -358,8 +358,8 @@ export const externaltheme: MantineThemeOverride = createTheme({
     pink: pinkColors,
 
     primary: blueColors,
-    secondary: slateColors,
-    dark: slateColors,
+    secondary: zincColors,
+    dark: zincColors,
 
     error: redColors as MantineColorsTuple,
     success: greenColors,
@@ -941,5 +941,3 @@ export const externaltheme: MantineThemeOverride = createTheme({
     }),
   },
 });
-
-

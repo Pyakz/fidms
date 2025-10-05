@@ -1,8 +1,19 @@
+import dbClient from "@server/db";
+import schema from "@server/db/schema";
 import { Hono } from "hono";
 
 export const inventory = new Hono()
-  .get("/", (c) => {
-    return c.json({ message: "Inventory root" });
+  .get("/", async (c) => {
+    const newInventoryItem = await dbClient
+      .insert(schema.inventory)
+      .values({
+        vin: `1HGCM82633A123456`,
+      })
+      .returning({
+        id: schema.inventory.id,
+        vin: schema.inventory.vin,
+      });
+    return c.json(newInventoryItem);
   })
   .get("/items", (c) => {
     return c.json({ items: ["item1", "item2", "item3"] });
