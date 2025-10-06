@@ -356,9 +356,9 @@ export const appTheme: MantineThemeOverride = createTheme({
     fuchsia: fuchsiaColors,
     pink: pinkColors,
 
-    primary: zincColors,
-    secondary: zincColors,
-    dark: zincColors,
+    primary: emeraldColors,
+    secondary: stoneColors,
+    dark: stoneColors,
 
     error: redColors as MantineColorsTuple,
     success: greenColors,
@@ -368,10 +368,9 @@ export const appTheme: MantineThemeOverride = createTheme({
   focusRing: "never",
   scale: 1,
   primaryColor: "primary",
-  primaryShade: { light: 8, dark: 0 },
+  primaryShade: { light: 5, dark: 5 },
   autoContrast: true,
   luminanceThreshold: 0.3,
-
   radius: {
     xs: rem("6px"),
     sm: rem("8px"),

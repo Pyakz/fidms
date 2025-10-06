@@ -8,7 +8,9 @@ import {
   Box,
   Burger,
   Button,
+  Center,
   Group,
+  Loader,
   LoadingOverlay,
   ScrollArea,
   Text,
@@ -26,7 +28,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
-import { SIDEBAR_LINKS } from "@/lib/constant";
+import { HEADER_HEIGHT, SIDEBAR_LINKS } from "@/lib/constant";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
@@ -47,6 +49,11 @@ export const Route = createFileRoute("/_app")({
   loader: ({ context: { session } }) => {
     return { session };
   },
+  pendingComponent: () => (
+    <Center className="h-screen">
+      <Loader />
+    </Center>
+  ),
 });
 
 function LayoutComponent() {
@@ -84,7 +91,7 @@ function LayoutComponent() {
 
       <AppShell
         layout="alt"
-        header={{ height: 55 }}
+        header={{ height: HEADER_HEIGHT }}
         navbar={{
           width: 280,
           // width: minimized ? 80 : 280,

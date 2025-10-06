@@ -1,9 +1,19 @@
 import { useSession } from "@/lib/auth";
-import { Card, Paper } from "@mantine/core";
+import { FULL_HEIGHT } from "@/lib/constant";
+import { Card, Center, Loader, Paper } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/dashboard")({
   component: RouteComponent,
+  loader: async () => {
+    await new Promise((r) => setTimeout(r, 2000));
+    return null;
+  },
+  pendingComponent: () => (
+    <Center h={FULL_HEIGHT}>
+      <Loader />
+    </Center>
+  ),
 });
 
 function RouteComponent() {

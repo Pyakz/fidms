@@ -1,5 +1,5 @@
 import { IconProps } from "@tabler/icons-react";
-import { NavLink } from "@mantine/core";
+import { Badge, NavLink } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { useMediaQuery } from "@mantine/hooks";
@@ -10,6 +10,8 @@ interface CommonProps {
   label: string;
   closeSidebarOnClick?: () => void;
   minimized?: boolean;
+  count?: number;
+  isNew?: boolean;
 }
 
 // 1. Type for a single, direct link (no nested links)
@@ -34,6 +36,8 @@ function LinksGroup({
   links,
   closeSidebarOnClick,
   minimized,
+  count,
+  isNew,
 }: LinksGroupProps) {
   const location = useRouterState({ select: (s) => s.location });
 
@@ -48,6 +52,9 @@ function LinksGroup({
     : minimized
       ? { padding: "11px", justifyContent: "center" }
       : { paddingTop: "4px", paddingBottom: "4px" };
+  const isActive =
+    link === currentPathname ||
+    (link !== "/" && currentPathname.startsWith(link || ""));
 
   const hasLinks = Array.isArray(links);
   const items = (hasLinks ? links : []).map((link) => (
@@ -60,6 +67,27 @@ function LinksGroup({
       preload="intent"
       styles={{ root }}
       variant="filled"
+      rightSection={
+        isNew ? (
+          <Badge
+            radius={2}
+            size="xs"
+            variant="light"
+            color={isActive ? "secondary" : "green"}
+          >
+            New
+          </Badge>
+        ) : count ? (
+          <Badge
+            radius={2}
+            size="xs"
+            variant="light"
+            color={isActive ? "secondary" : "green"}
+          >
+            {String(count)}
+          </Badge>
+        ) : null
+      }
       label={minimized ? null : link.label}
       onClick={() => {
         if (isMobile) {
@@ -102,6 +130,27 @@ function LinksGroup({
       to={link}
       className="rounded"
       variant="filled"
+      rightSection={
+        isNew ? (
+          <Badge
+            radius={2}
+            size="xs"
+            variant="light"
+            color={isActive ? "secondary" : "green"}
+          >
+            New
+          </Badge>
+        ) : count ? (
+          <Badge
+            radius={2}
+            size="xs"
+            variant="light"
+            color={isActive ? "secondary" : "green"}
+          >
+            {String(count)}
+          </Badge>
+        ) : null
+      }
       label={minimized ? null : label}
       styles={{ root }}
       fw={500}

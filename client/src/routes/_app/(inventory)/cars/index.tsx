@@ -1,19 +1,18 @@
-import Counter from "@/components/Counter";
+import { FULL_HEIGHT } from "@/lib/constant";
+import { Center, Loader } from "@mantine/core";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/(inventory)/cars/")({
   component: RouteComponent,
 
-  // simulate 3 seconds of loading time
   loader: async () => {
     await new Promise((r) => setTimeout(r, 3000));
     return null;
   },
   pendingComponent: () => (
-    <div>
-      Loading cars...
-      <Counter />
-    </div>
+    <Center h={FULL_HEIGHT}>
+      <Loader />
+    </Center>
   ),
 });
 

@@ -1,5 +1,6 @@
 import { useSession } from "@/lib/auth";
-import { Center } from "@mantine/core";
+import { FULL_HEIGHT } from "@/lib/constant";
+import { Center, Loader } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/settings")({
@@ -8,7 +9,11 @@ export const Route = createFileRoute("/_app/settings")({
     await new Promise((r) => setTimeout(r, 3000));
     return null;
   },
-  pendingComponent: () => <div>Loading...</div>,
+  pendingComponent: () => (
+    <Center h={FULL_HEIGHT}>
+      <Loader />
+    </Center>
+  ),
   errorComponent: ({ error }) => <div>Error: {error.message}</div>,
 });
 

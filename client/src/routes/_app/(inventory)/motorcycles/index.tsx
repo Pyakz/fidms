@@ -1,4 +1,5 @@
-import Counter from "@/components/Counter";
+import { FULL_HEIGHT } from "@/lib/constant";
+import { Center, Loader } from "@mantine/core";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/(inventory)/motorcycles/")({
@@ -9,10 +10,9 @@ export const Route = createFileRoute("/_app/(inventory)/motorcycles/")({
     return null;
   },
   pendingComponent: () => (
-    <div>
-      Loading motorcycles...
-      <Counter />
-    </div>
+    <Center h={FULL_HEIGHT}>
+      <Loader />
+    </Center>
   ),
 });
 

@@ -1,13 +1,13 @@
 import {
-  IconGauge,
   IconCarGarage,
   IconReport,
   IconAdjustments,
   IconBuilding,
+  IconLayoutDashboard,
 } from "@tabler/icons-react";
 
 export const SIDEBAR_LINKS = [
-  { label: "Dashboard", icon: IconGauge, link: "/dashboard" },
+  { label: "Dashboard", icon: IconLayoutDashboard, link: "/dashboard" },
   {
     label: "Inventory",
     icon: IconCarGarage,
@@ -28,3 +28,6 @@ export const SIDEBAR_LINKS = [
   },
   { label: "Settings", icon: IconAdjustments, link: "/settings" },
 ];
+
+export const HEADER_HEIGHT = 55;
+export const FULL_HEIGHT = `calc(100vh - ${HEADER_HEIGHT * 2}px)`;

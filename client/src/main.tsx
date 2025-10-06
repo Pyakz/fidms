@@ -19,7 +19,6 @@ const router = createRouter({
   context: {
     queryClient,
   },
-
   defaultPendingMs: 0,
 });
 
