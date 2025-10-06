@@ -3,6 +3,7 @@ import { NavLink } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { useMediaQuery } from "@mantine/hooks";
+import AppLink from "./AppLink";
 
 interface CommonProps {
   icon: React.FC<IconProps>;
@@ -56,6 +57,7 @@ function LinksGroup({
       to={link.link}
       fw={500}
       className="rounded"
+      preload="intent"
       styles={{ root }}
       variant="filled"
       label={minimized ? null : link.label}
@@ -95,8 +97,7 @@ function LinksGroup({
   }
 
   return (
-    <NavLink
-      component={Link}
+    <AppLink
       preload="intent"
       to={link}
       className="rounded"

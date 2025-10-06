@@ -17,6 +17,7 @@
     "@mantine/hooks": "^8.3.3",
     "@mantine/modals": "^8.3.3",
     "@mantine/notifications": "^8.3.3",
+    "@mantine/nprogress": "^8.3.3",
     "@mantine/spotlight": "^8.3.3",
     "@tabler/icons-react": "^3.35.0",
     "@tailwindcss/vite": "^4.1.14",

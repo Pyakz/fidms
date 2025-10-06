@@ -10,6 +10,7 @@ import "./styles/theme.css";
 
 import MantineProvider from "./providers/Mantine";
 import { ColorSchemeScript } from "@mantine/core";
+import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
 const queryClient = new QueryClient();
 // Create a new router instance
@@ -18,8 +19,16 @@ const router = createRouter({
   context: {
     queryClient,
   },
+
+  defaultPendingMs: 0,
 });
 
+router.subscribe("onBeforeLoad", ({ fromLocation, pathChanged }) => {
+  if (fromLocation && pathChanged) {
+    nprogress.start();
+  }
+});
+router.subscribe("onLoad", () => nprogress.complete());
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
   interface Register {
@@ -42,6 +51,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ColorSchemeScript defaultColorScheme="light" />
       <MantineProvider>
+        <NavigationProgress />
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
         </QueryClientProvider>
