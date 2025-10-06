@@ -99,7 +99,7 @@ function SignIn() {
         zIndex={1000}
         overlayProps={{ radius: "sm", blur: 2 }}
       />
-      <form className="space-y-3 md:p-5" onSubmit={form.onSubmit(handleSubmit)}>
+      <form className="space-y-3 p-5" onSubmit={form.onSubmit(handleSubmit)}>
         <Box>
           <Text fw="bold" size="lg">
             Sign In
