@@ -19,8 +19,16 @@ import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
-import { Route as AppInventoryMotorcyclesRouteImport } from './routes/_app/inventory/motorcycles'
-import { Route as AppInventoryCarsRouteImport } from './routes/_app/inventory/cars'
+import { Route as AppreportsSalesRouteImport } from './routes/_app/(reports)/sales'
+import { Route as AppinventoryMotorcyclesIndexRouteImport } from './routes/_app/(inventory)/motorcycles/index'
+import { Route as AppinventoryCarsIndexRouteImport } from './routes/_app/(inventory)/cars/index'
+import { Route as AppbranchesBranchesIndexRouteImport } from './routes/_app/(branches)/branches.index'
+import { Route as AppinventoryMotorcyclesIdRouteImport } from './routes/_app/(inventory)/motorcycles/$id'
+import { Route as AppbranchesBranchesIdRouteImport } from './routes/_app/(branches)/branches.$id'
+import { Route as AppinventoryCarstabsIdRouteImport } from './routes/_app/(inventory)/cars/(tabs)/$id'
+import { Route as AppinventoryCarstabsIdIndexRouteImport } from './routes/_app/(inventory)/cars/(tabs)/$id.index'
+import { Route as AppinventoryCarstabsIdServiceHistoryRouteImport } from './routes/_app/(inventory)/cars/(tabs)/$id.service-history'
+import { Route as AppinventoryCarstabsIdGalleryRouteImport } from './routes/_app/(inventory)/cars/(tabs)/$id.gallery'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -70,16 +78,62 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
-const AppInventoryMotorcyclesRoute = AppInventoryMotorcyclesRouteImport.update({
-  id: '/inventory/motorcycles',
-  path: '/inventory/motorcycles',
+const AppreportsSalesRoute = AppreportsSalesRouteImport.update({
+  id: '/(reports)/sales',
+  path: '/sales',
   getParentRoute: () => AppRoute,
 } as any)
-const AppInventoryCarsRoute = AppInventoryCarsRouteImport.update({
-  id: '/inventory/cars',
-  path: '/inventory/cars',
+const AppinventoryMotorcyclesIndexRoute =
+  AppinventoryMotorcyclesIndexRouteImport.update({
+    id: '/(inventory)/motorcycles/',
+    path: '/motorcycles/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppinventoryCarsIndexRoute = AppinventoryCarsIndexRouteImport.update({
+  id: '/(inventory)/cars/',
+  path: '/cars/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppbranchesBranchesIndexRoute =
+  AppbranchesBranchesIndexRouteImport.update({
+    id: '/(branches)/branches/',
+    path: '/branches/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppinventoryMotorcyclesIdRoute =
+  AppinventoryMotorcyclesIdRouteImport.update({
+    id: '/(inventory)/motorcycles/$id',
+    path: '/motorcycles/$id',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppbranchesBranchesIdRoute = AppbranchesBranchesIdRouteImport.update({
+  id: '/(branches)/branches/$id',
+  path: '/branches/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppinventoryCarstabsIdRoute = AppinventoryCarstabsIdRouteImport.update({
+  id: '/(inventory)/cars/(tabs)/$id',
+  path: '/cars/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppinventoryCarstabsIdIndexRoute =
+  AppinventoryCarstabsIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppinventoryCarstabsIdRoute,
+  } as any)
+const AppinventoryCarstabsIdServiceHistoryRoute =
+  AppinventoryCarstabsIdServiceHistoryRouteImport.update({
+    id: '/service-history',
+    path: '/service-history',
+    getParentRoute: () => AppinventoryCarstabsIdRoute,
+  } as any)
+const AppinventoryCarstabsIdGalleryRoute =
+  AppinventoryCarstabsIdGalleryRouteImport.update({
+    id: '/gallery',
+    path: '/gallery',
+    getParentRoute: () => AppinventoryCarstabsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
@@ -90,8 +144,16 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof PublicSignInRoute
   '/sign-up': typeof PublicSignUpRoute
   '/': typeof PublicIndexRoute
-  '/inventory/cars': typeof AppInventoryCarsRoute
-  '/inventory/motorcycles': typeof AppInventoryMotorcyclesRoute
+  '/sales': typeof AppreportsSalesRoute
+  '/branches/$id': typeof AppbranchesBranchesIdRoute
+  '/motorcycles/$id': typeof AppinventoryMotorcyclesIdRoute
+  '/branches': typeof AppbranchesBranchesIndexRoute
+  '/cars': typeof AppinventoryCarsIndexRoute
+  '/motorcycles': typeof AppinventoryMotorcyclesIndexRoute
+  '/cars/$id': typeof AppinventoryCarstabsIdRouteWithChildren
+  '/cars/$id/gallery': typeof AppinventoryCarstabsIdGalleryRoute
+  '/cars/$id/service-history': typeof AppinventoryCarstabsIdServiceHistoryRoute
+  '/cars/$id/': typeof AppinventoryCarstabsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
@@ -102,8 +164,15 @@ export interface FileRoutesByTo {
   '/sign-in': typeof PublicSignInRoute
   '/sign-up': typeof PublicSignUpRoute
   '/': typeof PublicIndexRoute
-  '/inventory/cars': typeof AppInventoryCarsRoute
-  '/inventory/motorcycles': typeof AppInventoryMotorcyclesRoute
+  '/sales': typeof AppreportsSalesRoute
+  '/branches/$id': typeof AppbranchesBranchesIdRoute
+  '/motorcycles/$id': typeof AppinventoryMotorcyclesIdRoute
+  '/branches': typeof AppbranchesBranchesIndexRoute
+  '/cars': typeof AppinventoryCarsIndexRoute
+  '/motorcycles': typeof AppinventoryMotorcyclesIndexRoute
+  '/cars/$id/gallery': typeof AppinventoryCarstabsIdGalleryRoute
+  '/cars/$id/service-history': typeof AppinventoryCarstabsIdServiceHistoryRoute
+  '/cars/$id': typeof AppinventoryCarstabsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,8 +186,16 @@ export interface FileRoutesById {
   '/_public/sign-in': typeof PublicSignInRoute
   '/_public/sign-up': typeof PublicSignUpRoute
   '/_public/': typeof PublicIndexRoute
-  '/_app/inventory/cars': typeof AppInventoryCarsRoute
-  '/_app/inventory/motorcycles': typeof AppInventoryMotorcyclesRoute
+  '/_app/(reports)/sales': typeof AppreportsSalesRoute
+  '/_app/(branches)/branches/$id': typeof AppbranchesBranchesIdRoute
+  '/_app/(inventory)/motorcycles/$id': typeof AppinventoryMotorcyclesIdRoute
+  '/_app/(branches)/branches/': typeof AppbranchesBranchesIndexRoute
+  '/_app/(inventory)/cars/': typeof AppinventoryCarsIndexRoute
+  '/_app/(inventory)/motorcycles/': typeof AppinventoryMotorcyclesIndexRoute
+  '/_app/(inventory)/cars/(tabs)/$id': typeof AppinventoryCarstabsIdRouteWithChildren
+  '/_app/(inventory)/cars/(tabs)/$id/gallery': typeof AppinventoryCarstabsIdGalleryRoute
+  '/_app/(inventory)/cars/(tabs)/$id/service-history': typeof AppinventoryCarstabsIdServiceHistoryRoute
+  '/_app/(inventory)/cars/(tabs)/$id/': typeof AppinventoryCarstabsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,8 +208,16 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/'
-    | '/inventory/cars'
-    | '/inventory/motorcycles'
+    | '/sales'
+    | '/branches/$id'
+    | '/motorcycles/$id'
+    | '/branches'
+    | '/cars'
+    | '/motorcycles'
+    | '/cars/$id'
+    | '/cars/$id/gallery'
+    | '/cars/$id/service-history'
+    | '/cars/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/dashboard'
@@ -143,8 +228,15 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/'
-    | '/inventory/cars'
-    | '/inventory/motorcycles'
+    | '/sales'
+    | '/branches/$id'
+    | '/motorcycles/$id'
+    | '/branches'
+    | '/cars'
+    | '/motorcycles'
+    | '/cars/$id/gallery'
+    | '/cars/$id/service-history'
+    | '/cars/$id'
   id:
     | '__root__'
     | '/_app'
@@ -157,8 +249,16 @@ export interface FileRouteTypes {
     | '/_public/sign-in'
     | '/_public/sign-up'
     | '/_public/'
-    | '/_app/inventory/cars'
-    | '/_app/inventory/motorcycles'
+    | '/_app/(reports)/sales'
+    | '/_app/(branches)/branches/$id'
+    | '/_app/(inventory)/motorcycles/$id'
+    | '/_app/(branches)/branches/'
+    | '/_app/(inventory)/cars/'
+    | '/_app/(inventory)/motorcycles/'
+    | '/_app/(inventory)/cars/(tabs)/$id'
+    | '/_app/(inventory)/cars/(tabs)/$id/gallery'
+    | '/_app/(inventory)/cars/(tabs)/$id/service-history'
+    | '/_app/(inventory)/cars/(tabs)/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -238,37 +338,122 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/inventory/motorcycles': {
-      id: '/_app/inventory/motorcycles'
-      path: '/inventory/motorcycles'
-      fullPath: '/inventory/motorcycles'
-      preLoaderRoute: typeof AppInventoryMotorcyclesRouteImport
+    '/_app/(reports)/sales': {
+      id: '/_app/(reports)/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof AppreportsSalesRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/inventory/cars': {
-      id: '/_app/inventory/cars'
-      path: '/inventory/cars'
-      fullPath: '/inventory/cars'
-      preLoaderRoute: typeof AppInventoryCarsRouteImport
+    '/_app/(inventory)/motorcycles/': {
+      id: '/_app/(inventory)/motorcycles/'
+      path: '/motorcycles'
+      fullPath: '/motorcycles'
+      preLoaderRoute: typeof AppinventoryMotorcyclesIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/(inventory)/cars/': {
+      id: '/_app/(inventory)/cars/'
+      path: '/cars'
+      fullPath: '/cars'
+      preLoaderRoute: typeof AppinventoryCarsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/(branches)/branches/': {
+      id: '/_app/(branches)/branches/'
+      path: '/branches'
+      fullPath: '/branches'
+      preLoaderRoute: typeof AppbranchesBranchesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/(inventory)/motorcycles/$id': {
+      id: '/_app/(inventory)/motorcycles/$id'
+      path: '/motorcycles/$id'
+      fullPath: '/motorcycles/$id'
+      preLoaderRoute: typeof AppinventoryMotorcyclesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/(branches)/branches/$id': {
+      id: '/_app/(branches)/branches/$id'
+      path: '/branches/$id'
+      fullPath: '/branches/$id'
+      preLoaderRoute: typeof AppbranchesBranchesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/(inventory)/cars/(tabs)/$id': {
+      id: '/_app/(inventory)/cars/(tabs)/$id'
+      path: '/cars/$id'
+      fullPath: '/cars/$id'
+      preLoaderRoute: typeof AppinventoryCarstabsIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/(inventory)/cars/(tabs)/$id/': {
+      id: '/_app/(inventory)/cars/(tabs)/$id/'
+      path: '/'
+      fullPath: '/cars/$id/'
+      preLoaderRoute: typeof AppinventoryCarstabsIdIndexRouteImport
+      parentRoute: typeof AppinventoryCarstabsIdRoute
+    }
+    '/_app/(inventory)/cars/(tabs)/$id/service-history': {
+      id: '/_app/(inventory)/cars/(tabs)/$id/service-history'
+      path: '/service-history'
+      fullPath: '/cars/$id/service-history'
+      preLoaderRoute: typeof AppinventoryCarstabsIdServiceHistoryRouteImport
+      parentRoute: typeof AppinventoryCarstabsIdRoute
+    }
+    '/_app/(inventory)/cars/(tabs)/$id/gallery': {
+      id: '/_app/(inventory)/cars/(tabs)/$id/gallery'
+      path: '/gallery'
+      fullPath: '/cars/$id/gallery'
+      preLoaderRoute: typeof AppinventoryCarstabsIdGalleryRouteImport
+      parentRoute: typeof AppinventoryCarstabsIdRoute
     }
   }
 }
+
+interface AppinventoryCarstabsIdRouteChildren {
+  AppinventoryCarstabsIdGalleryRoute: typeof AppinventoryCarstabsIdGalleryRoute
+  AppinventoryCarstabsIdServiceHistoryRoute: typeof AppinventoryCarstabsIdServiceHistoryRoute
+  AppinventoryCarstabsIdIndexRoute: typeof AppinventoryCarstabsIdIndexRoute
+}
+
+const AppinventoryCarstabsIdRouteChildren: AppinventoryCarstabsIdRouteChildren =
+  {
+    AppinventoryCarstabsIdGalleryRoute: AppinventoryCarstabsIdGalleryRoute,
+    AppinventoryCarstabsIdServiceHistoryRoute:
+      AppinventoryCarstabsIdServiceHistoryRoute,
+    AppinventoryCarstabsIdIndexRoute: AppinventoryCarstabsIdIndexRoute,
+  }
+
+const AppinventoryCarstabsIdRouteWithChildren =
+  AppinventoryCarstabsIdRoute._addFileChildren(
+    AppinventoryCarstabsIdRouteChildren,
+  )
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
-  AppInventoryCarsRoute: typeof AppInventoryCarsRoute
-  AppInventoryMotorcyclesRoute: typeof AppInventoryMotorcyclesRoute
+  AppreportsSalesRoute: typeof AppreportsSalesRoute
+  AppbranchesBranchesIdRoute: typeof AppbranchesBranchesIdRoute
+  AppinventoryMotorcyclesIdRoute: typeof AppinventoryMotorcyclesIdRoute
+  AppbranchesBranchesIndexRoute: typeof AppbranchesBranchesIndexRoute
+  AppinventoryCarsIndexRoute: typeof AppinventoryCarsIndexRoute
+  AppinventoryMotorcyclesIndexRoute: typeof AppinventoryMotorcyclesIndexRoute
+  AppinventoryCarstabsIdRoute: typeof AppinventoryCarstabsIdRouteWithChildren
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
-  AppInventoryCarsRoute: AppInventoryCarsRoute,
-  AppInventoryMotorcyclesRoute: AppInventoryMotorcyclesRoute,
+  AppreportsSalesRoute: AppreportsSalesRoute,
+  AppbranchesBranchesIdRoute: AppbranchesBranchesIdRoute,
+  AppinventoryMotorcyclesIdRoute: AppinventoryMotorcyclesIdRoute,
+  AppbranchesBranchesIndexRoute: AppbranchesBranchesIndexRoute,
+  AppinventoryCarsIndexRoute: AppinventoryCarsIndexRoute,
+  AppinventoryMotorcyclesIndexRoute: AppinventoryMotorcyclesIndexRoute,
+  AppinventoryCarstabsIdRoute: AppinventoryCarstabsIdRouteWithChildren,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

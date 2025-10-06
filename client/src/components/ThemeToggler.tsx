@@ -4,7 +4,6 @@ import {
   useComputedColorScheme,
 } from "@mantine/core";
 import { IconSun, IconMoon } from "@tabler/icons-react";
-import { twMerge } from "tailwind-merge";
 
 function ThemeToggler() {
   const { setColorScheme } = useMantineColorScheme();
@@ -18,13 +17,13 @@ function ThemeToggler() {
         setColorScheme(computedColorScheme === "light" ? "dark" : "light")
       }
       variant="default"
-      size="xl"
       aria-label="Toggle color scheme"
+      size="lg"
     >
       {computedColorScheme === "light" ? (
-        <IconMoon className={twMerge("w-[22px] h-[22px]")} stroke={1.5} />
+        <IconMoon size={20} stroke={1.5} />
       ) : (
-        <IconSun className={twMerge("w-[22px] h-[22px]")} stroke={1.5} />
+        <IconSun size={20} stroke={1.5} />
       )}
     </ActionIcon>
   );

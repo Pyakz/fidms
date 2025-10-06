@@ -66,7 +66,6 @@ const slateColors: MantineColorsTuple = [
   "#020817",
   "#64748B",
 ];
-
 const grayColors: MantineColorsTuple = [
   "#f9fafb",
   "#f3f4f6",
@@ -328,7 +327,7 @@ const pinkColors: MantineColorsTuple = [
   "#EC4899",
 ];
 
-export const externaltheme: MantineThemeOverride = createTheme({
+export const appTheme: MantineThemeOverride = createTheme({
   colors: {
     slate: slateColors,
     gray: grayColors,
@@ -357,7 +356,7 @@ export const externaltheme: MantineThemeOverride = createTheme({
     fuchsia: fuchsiaColors,
     pink: pinkColors,
 
-    primary: blueColors,
+    primary: zincColors,
     secondary: zincColors,
     dark: zincColors,
 
@@ -369,18 +368,18 @@ export const externaltheme: MantineThemeOverride = createTheme({
   focusRing: "never",
   scale: 1,
   primaryColor: "primary",
-  primaryShade: { light: 6, dark: 5 },
+  primaryShade: { light: 8, dark: 0 },
   autoContrast: true,
   luminanceThreshold: 0.3,
-  // fontFamily: "Geist",
+
   radius: {
-    xs: rem("4px"),
-    sm: rem("7px"),
-    md: rem("11px"),
-    lg: rem("15px"),
+    xs: rem("6px"),
+    sm: rem("8px"),
+    md: rem("12px"),
+    lg: rem("16px"),
     xl: rem("24px"),
   },
-  defaultRadius: "xs",
+  defaultRadius: "sm",
   spacing: {
     "4xs": rem("2px"),
     "3xs": rem("4px"),
@@ -413,7 +412,6 @@ export const externaltheme: MantineThemeOverride = createTheme({
   },
 
   headings: {
-    fontFamily: "Geist",
     sizes: {
       h1: {
         fontSize: rem("36px"),
@@ -448,7 +446,7 @@ export const externaltheme: MantineThemeOverride = createTheme({
 
   cursorType: "pointer",
   other: {
-    style: "theme",
+    style: "shadcn",
   },
   components: {
     Container: Container.extend({
@@ -936,7 +934,7 @@ export const externaltheme: MantineThemeOverride = createTheme({
     }),
     Paper: Paper.extend({
       defaultProps: {
-        shadow: "xs",
+        shadow: "xl",
       },
     }),
   },

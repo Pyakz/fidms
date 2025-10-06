@@ -1,5 +1,5 @@
 import { useSession } from "@/lib/auth";
-import { Paper } from "@mantine/core";
+import { Card, Paper } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/dashboard")({
@@ -22,14 +22,28 @@ function RouteComponent() {
   }
   return (
     <div className="grid grid-cols-4 gap-3">
-      <div className="border-2 border-indigo-600 h-23">2</div>
-      <div className="border-2 border-indigo-600 h-23">3</div>
-      <div className="border-4 border-indigo-600 h-23">4</div>
-      <div className="border-8 border-indigo-600 h-23">5</div>
-      <Paper withBorder className="col-span-1 h-36 p-3">
+      <div className="border-2 light:border-indigo-600 h-23 dark:bg-red-100">
+        2
+      </div>
+      <div className="border-2 dark:rounded-md dark:border-indigo-600 h-23">
+        3
+      </div>
+      <div className="border-4 dark:rounded-md dark:border-indigo-600 h-23">
+        4
+      </div>
+      <div className="border-8 dark:rounded-md dark:border-indigo-600 h-23">
+        5
+      </div>
+      <Paper
+        withBorder
+        className="col-span-1 h-36 p-3 bg-orange-100 text-orange-500"
+      >
         Paper
       </Paper>
-      <Paper withBorder className="col-span-1 h-36 p-3">
+      <Card className="bg-red-500">
+        <div className="h-36 p-3">Card</div>
+      </Card>
+      <Paper withBorder className="col-span-1 h-36 p-3 text-red-400">
         Paper
       </Paper>
       <Paper withBorder className="col-span-1 h-36 p-3">

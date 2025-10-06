@@ -1,4 +1,4 @@
-import { betterAuth, uuidv7 } from "better-auth";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import dbClient from "./db";
 import { lastLoginMethod, openAPI } from "better-auth/plugins";

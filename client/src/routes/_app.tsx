@@ -1,8 +1,9 @@
-import LinksGroup from "@/components/LinksGroup/LinksGroup";
+import LinksGroup from "@/components/LinksGroup";
 import ThemeToggler from "@/components/ThemeToggler";
 import { signOut } from "@/lib/auth";
 import { sessionQuery } from "@/lib/queryOptions";
 import {
+  ActionIcon,
   AppShell,
   Avatar,
   Box,
@@ -16,9 +17,8 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
-  IconAdjustments,
-  IconCarGarage,
-  IconGauge,
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftExpand,
   IconSelector,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
@@ -27,6 +27,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
+import { SIDEBAR_LINKS } from "@/lib/constant";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
@@ -66,35 +67,29 @@ function LayoutComponent() {
   }, [computedColorScheme]);
 
   const { session } = Route.useLoaderData();
-  const [visible, { open, close }] = useDisclosure(false);
-  const [opened, { toggle }] = useDisclosure();
-  const links = [
-    { label: "Dashboard", icon: IconGauge, link: "/dashboard" },
-    {
-      label: "Inventory",
-      icon: IconCarGarage,
-      links: [
-        { label: "Cars", link: "/inventory/cars" },
-        { label: "Motorcycles", link: "/inventory/motorcycles" },
-      ],
-    },
-    { label: "Settings", icon: IconAdjustments, link: "/settings" },
-  ].map((item) => <LinksGroup {...item} key={item.label} />);
+  const [
+    visibleLoadingDrawer,
+    { open: openLoadingDrawer, close: closeLoadingDrawer },
+  ] = useDisclosure(false);
+  const [mobileOpened, { toggle: toggleMobile, close: closeSideBar }] =
+    useDisclosure();
+  const [minimized, { toggle: toggleMinimized }] = useDisclosure(true);
+
   return (
     <Fragment>
       <LoadingOverlay
-        visible={visible}
+        visible={visibleLoadingDrawer}
         zIndex={1000}
         overlayProps={{ radius: "sm", blur: 2 }}
       />
 
       <AppShell
         layout="alt"
-        header={{ height: 60 }}
+        header={{ height: 55 }}
         navbar={{
-          width: 280,
+          width: minimized ? 80 : 280,
           breakpoint: "sm",
-          collapsed: { mobile: !opened },
+          collapsed: { mobile: !mobileOpened },
         }}
         styles={(theme) => ({
           navbar: {
@@ -108,21 +103,45 @@ function LayoutComponent() {
                 : theme.colors.gray[2],
           },
           header: {
-            border: 0,
+            borderColor:
+              computedColorScheme === "dark"
+                ? theme.colors.zinc[7]
+                : theme.colors.gray[2],
           },
         })}
         padding="md"
       >
         <AppShell.Header>
-          <Group h="100%" px="md">
+          <Group h="100%" justify="space-between" px="sm">
+            <ActionIcon
+              variant="transparent"
+              onClick={toggleMinimized}
+              visibleFrom="sm"
+              size="lg"
+            >
+              {minimized ? (
+                <IconLayoutSidebarLeftExpand size={20} stroke={1.6} />
+              ) : (
+                <IconLayoutSidebarLeftCollapse size={20} stroke={1.6} />
+              )}
+            </ActionIcon>
             <Burger
-              opened={opened}
-              onClick={toggle}
+              opened={mobileOpened}
+              onClick={toggleMobile}
               hiddenFrom="sm"
               size="sm"
             />
-            Header
+            <ThemeToggler />
           </Group>
+
+          {/* 
+            <Burger
+              opened={minimized}
+              onClick={toggleMinimized}
+              visibleFrom="sm"
+              size="sm"
+            />
+          </Group> */}
         </AppShell.Header>
         <AppShell.Navbar>
           <Box p="md" pb={0}>
@@ -147,24 +166,27 @@ function LayoutComponent() {
             </Group>
           </Box>
           <ScrollArea className="flex-1" p="md">
-            {links}
+            {SIDEBAR_LINKS.map((item) => (
+              <LinksGroup
+                {...item}
+                key={item.label}
+                closeSidebarOnClick={closeSideBar}
+              />
+            ))}
           </ScrollArea>
           <div className="p-3">
-            <ThemeToggler />
             <Button
+              fullWidth
               onClick={() =>
                 signOut({
                   fetchOptions: {
-                    onRequest: open,
-                    onError: close,
+                    onRequest: openLoadingDrawer,
+                    onError: closeLoadingDrawer,
                     onSuccess: () => {
                       close();
                       queryClient.clear();
                       navigate({
                         to: "/sign-in",
-                        search: {
-                          redirect: window.location.href,
-                        },
                       });
                     },
                   },
