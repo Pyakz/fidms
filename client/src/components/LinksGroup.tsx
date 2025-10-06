@@ -51,7 +51,7 @@ function LinksGroup({
       }
     : minimized
       ? { padding: "11px", justifyContent: "center" }
-      : { paddingTop: "4px", paddingBottom: "4px" };
+      : { paddingTop: "5px", paddingBottom: "5px" };
   const isActive =
     link === currentPathname ||
     (link !== "/" && currentPathname.startsWith(link || ""));

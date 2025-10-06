@@ -357,8 +357,8 @@ export const appTheme: MantineThemeOverride = createTheme({
     pink: pinkColors,
 
     primary: emeraldColors,
-    secondary: stoneColors,
-    dark: stoneColors,
+    secondary: zincColors,
+    dark: zincColors,
 
     error: redColors as MantineColorsTuple,
     success: greenColors,

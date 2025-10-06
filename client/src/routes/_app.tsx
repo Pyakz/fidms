@@ -3,6 +3,7 @@ import ThemeToggler from "@/components/ThemeToggler";
 import { signOut } from "@/lib/auth";
 import { sessionQuery } from "@/lib/queryOptions";
 import {
+  Affix,
   AppShell,
   Avatar,
   Box,
@@ -213,6 +214,19 @@ function LayoutComponent() {
           <Outlet />
         </AppShell.Main>
       </AppShell>
+
+      <Affix
+        position={{ bottom: 40, right: 40 }}
+        hiddenFrom="sm"
+        hidden={!mobileOpened}
+      >
+        <Burger
+          opened={mobileOpened}
+          onClick={toggleMobile}
+          hiddenFrom="sm"
+          size="sm"
+        />
+      </Affix>
     </Fragment>
   );
 }
