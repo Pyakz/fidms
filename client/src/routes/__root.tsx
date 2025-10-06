@@ -1,5 +1,6 @@
 import {
   createRootRouteWithContext,
+  HeadContent,
   Link,
   Outlet,
 } from "@tanstack/react-router";
@@ -33,11 +34,19 @@ export const Route = createRootRouteWithContext<{
       </Alert>
     </Center>
   ),
+  head: () => ({
+    meta: [
+      {
+        title: "FIDMS",
+      },
+    ],
+  }),
 });
 
 function RootComponent() {
   return (
     <>
+      <HeadContent />
       <Outlet />
       <TanStackDevtools
         eventBusConfig={{ debug: true }}
