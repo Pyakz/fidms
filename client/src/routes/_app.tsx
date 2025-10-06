@@ -3,7 +3,6 @@ import ThemeToggler from "@/components/ThemeToggler";
 import { signOut } from "@/lib/auth";
 import { sessionQuery } from "@/lib/queryOptions";
 import {
-  ActionIcon,
   AppShell,
   Avatar,
   Box,
@@ -17,8 +16,8 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
-  IconLayoutSidebarLeftCollapse,
-  IconLayoutSidebarLeftExpand,
+  // IconLayoutSidebarLeftCollapse,
+  // IconLayoutSidebarLeftExpand,
   IconSelector,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
@@ -73,7 +72,7 @@ function LayoutComponent() {
   ] = useDisclosure(false);
   const [mobileOpened, { toggle: toggleMobile, close: closeSideBar }] =
     useDisclosure();
-  const [minimized, { toggle: toggleMinimized }] = useDisclosure(true);
+  // const [minimized, { toggle: toggleMinimized }] = useDisclosure(false);
 
   return (
     <Fragment>
@@ -87,7 +86,8 @@ function LayoutComponent() {
         layout="alt"
         header={{ height: 55 }}
         navbar={{
-          width: minimized ? 80 : 280,
+          width: 280,
+          // width: minimized ? 80 : 280,
           breakpoint: "sm",
           collapsed: { mobile: !mobileOpened },
         }}
@@ -113,7 +113,7 @@ function LayoutComponent() {
       >
         <AppShell.Header>
           <Group h="100%" justify="space-between" px="sm">
-            <ActionIcon
+            {/* <ActionIcon
               variant="transparent"
               onClick={toggleMinimized}
               visibleFrom="sm"
@@ -124,7 +124,7 @@ function LayoutComponent() {
               ) : (
                 <IconLayoutSidebarLeftCollapse size={20} stroke={1.6} />
               )}
-            </ActionIcon>
+            </ActionIcon> */}
             <Burger
               opened={mobileOpened}
               onClick={toggleMobile}
@@ -133,15 +133,6 @@ function LayoutComponent() {
             />
             <ThemeToggler />
           </Group>
-
-          {/* 
-            <Burger
-              opened={minimized}
-              onClick={toggleMinimized}
-              visibleFrom="sm"
-              size="sm"
-            />
-          </Group> */}
         </AppShell.Header>
         <AppShell.Navbar>
           <Box p="md" pb={0}>
@@ -152,7 +143,6 @@ function LayoutComponent() {
                 alt={session.data?.user.name ?? undefined}
                 radius={5}
               />
-
               <div style={{ flex: 1 }}>
                 <Text size="xs" fw={500}>
                   {session.data?.user.firstName} {session.data?.user.lastName}
@@ -163,6 +153,21 @@ function LayoutComponent() {
                 </Text>
               </div>
               <IconSelector size={16} />
+              {/* {!minimized && (
+                <Fragment>
+                  <div style={{ flex: 1 }}>
+                    <Text size="xs" fw={500}>
+                      {session.data?.user.firstName}{" "}
+                      {session.data?.user.lastName}
+                    </Text>
+
+                    <Text c="dimmed" size="xs">
+                      {session.data?.user.email}
+                    </Text>
+                  </div>
+                  <IconSelector size={16} />
+                </Fragment>
+              )} */}
             </Group>
           </Box>
           <ScrollArea className="flex-1" p="md">

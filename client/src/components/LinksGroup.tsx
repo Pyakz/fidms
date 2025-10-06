@@ -7,21 +7,20 @@ import { useMediaQuery } from "@mantine/hooks";
 interface CommonProps {
   icon: React.FC<IconProps>;
   label: string;
-  initiallyOpened?: boolean;
+  closeSidebarOnClick?: () => void;
+  minimized?: boolean;
 }
 
 // 1. Type for a single, direct link (no nested links)
 interface SingleLinkProps extends CommonProps {
   link: string; // Required when no 'links' array is present
   links?: never; // Ensures 'links' is not present
-  closeSidebarOnClick?: () => void;
 }
 
 // 2. Type for a group of links (must have nested links, no direct link)
 interface GroupLinkProps extends CommonProps {
   link?: never; // Ensures 'link' is not present
   links: { label: string; link: string }[]; // Required when no single 'link' is present
-  closeSidebarOnClick?: () => void;
 }
 
 // The final interface is a union of the two distinct types
@@ -33,6 +32,7 @@ function LinksGroup({
   link,
   links,
   closeSidebarOnClick,
+  minimized,
 }: LinksGroupProps) {
   const location = useRouterState({ select: (s) => s.location });
 
@@ -44,7 +44,9 @@ function LinksGroup({
     ? {
         padding: "11px",
       }
-    : { paddingTop: "4px", paddingBottom: "4px" };
+    : minimized
+      ? { padding: "11px", justifyContent: "center" }
+      : { paddingTop: "4px", paddingBottom: "4px" };
 
   const hasLinks = Array.isArray(links);
   const items = (hasLinks ? links : []).map((link) => (
@@ -56,7 +58,7 @@ function LinksGroup({
       className="rounded"
       styles={{ root }}
       variant="filled"
-      label={link.label}
+      label={minimized ? null : link.label}
       onClick={() => {
         if (isMobile) {
           closeSidebarOnClick?.();
@@ -75,7 +77,7 @@ function LinksGroup({
     return (
       <NavLink
         href="#required-for-focus"
-        label={label}
+        label={minimized ? null : label}
         variant="filled"
         className="rounded"
         styles={{ root }}
@@ -99,7 +101,7 @@ function LinksGroup({
       to={link}
       className="rounded"
       variant="filled"
-      label={label}
+      label={minimized ? null : label}
       styles={{ root }}
       fw={500}
       leftSection={<Icon size={16} />}
