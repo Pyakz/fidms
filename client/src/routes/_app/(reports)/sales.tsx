@@ -13,6 +13,7 @@ export const Route = createFileRoute("/_app/(reports)/sales")({
       <Loader />
     </Center>
   ),
+  head: () => ({ meta: [{ title: "Sales" }] }),
 });
 
 function RouteComponent() {

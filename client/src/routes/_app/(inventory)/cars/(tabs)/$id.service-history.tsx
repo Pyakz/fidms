@@ -16,6 +16,13 @@ export const Route = createFileRoute(
       <Counter />
     </div>
   ),
+  head: () => ({
+    meta: [
+      {
+        title: "Service History",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

@@ -14,7 +14,6 @@ export const Route = createFileRoute("/_app/dashboard")({
       <Loader />
     </Center>
   ),
-
   head: () => ({ meta: [{ title: "Dashboard - FIDMS" }] }),
 });
 

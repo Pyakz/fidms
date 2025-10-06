@@ -14,6 +14,7 @@ export const Route = createFileRoute("/_app/profile")({
       <Loader />
     </Center>
   ),
+  head: () => ({ meta: [{ title: "Profile" }] }),
 });
 
 function RouteComponent() {

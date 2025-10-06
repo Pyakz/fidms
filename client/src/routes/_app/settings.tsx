@@ -15,6 +15,13 @@ export const Route = createFileRoute("/_app/settings")({
     </Center>
   ),
   errorComponent: ({ error }) => <div>Error: {error.message}</div>,
+  head: () => ({
+    meta: [
+      {
+        title: "Settings",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

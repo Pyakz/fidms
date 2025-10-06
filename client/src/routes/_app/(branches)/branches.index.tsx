@@ -13,6 +13,7 @@ export const Route = createFileRoute("/_app/(branches)/branches/")({
       <Loader />
     </Center>
   ),
+  head: () => ({ meta: [{ title: "Branches" }] }),
 });
 
 function RouteComponent() {

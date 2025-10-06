@@ -14,6 +14,13 @@ export const Route = createFileRoute("/_app/(inventory)/cars/(tabs)/$id/")({
       <Counter />
     </div>
   ),
+  head: () => ({
+    meta: [
+      {
+        title: "Details",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

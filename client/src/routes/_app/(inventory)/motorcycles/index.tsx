@@ -14,6 +14,13 @@ export const Route = createFileRoute("/_app/(inventory)/motorcycles/")({
       <Loader />
     </Center>
   ),
+  head: () => ({
+    meta: [
+      {
+        title: "Motorcycles",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {
