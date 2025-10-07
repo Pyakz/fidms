@@ -57,7 +57,6 @@ function LinksGroup({
   const hasLinks = Array.isArray(links);
   const items = (hasLinks ? links : []).map((link) => (
     <NavLink
-      my={1}
       component={Link}
       key={link.label}
       to={link.link}
@@ -108,10 +107,10 @@ function LinksGroup({
         <Popover.Target>
           <Tooltip label={label} position="right" withArrow>
             <ActionIcon
+              mb={4}
               className="rounded"
               variant={isParentActive ? "filled" : "default"}
               size="xl"
-              my={3}
             >
               <Icon size={16} />
             </ActionIcon>
@@ -121,7 +120,6 @@ function LinksGroup({
       </Popover>
     ) : (
       <NavLink
-        my={1}
         href="#required-for-focus"
         label={minimized ? null : label}
         variant="filled"
@@ -146,17 +144,16 @@ function LinksGroup({
         className="rounded"
         variant={isActive ? "filled" : "default"}
         size="xl"
-        my={3}
         component={Link}
         to={link || "#"}
         preload="intent"
+        mb={4}
       >
         <Icon size={16} />
       </ActionIcon>
     </Tooltip>
   ) : (
     <AppLink
-      my={1}
       preload="intent"
       to={link}
       className="rounded"

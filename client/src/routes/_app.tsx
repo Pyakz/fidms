@@ -18,7 +18,7 @@ import {
   Text,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import {
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
@@ -85,8 +85,11 @@ function LayoutComponent() {
   ] = useDisclosure(false);
   const [mobileOpened, { toggle: toggleMobile, close: closeSideBar }] =
     useDisclosure();
-  const [minimized, { toggle: toggleMinimized }] = useDisclosure(false);
-
+  // const [minimized, { toggle: toggleMinimized }] = useDisclosure(false);
+  const [minimized, setMinimized] = useLocalStorage({
+    key: "sidebar-minimized",
+    defaultValue: false,
+  });
   return (
     <Fragment>
       <LoadingOverlay
@@ -128,7 +131,7 @@ function LayoutComponent() {
             <Group visibleFrom="sm">
               <ActionIcon
                 variant="transparent"
-                onClick={toggleMinimized}
+                onClick={() => setMinimized((m) => !m)}
                 visibleFrom="sm"
                 size="lg"
                 color="secondary"
