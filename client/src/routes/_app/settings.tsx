@@ -22,6 +22,9 @@ export const Route = createFileRoute("/_app/settings")({
       },
     ],
   }),
+  staticData: {
+    breadcrumbs: [{ order: 1, title: "Settings", to: "#", active: true }],
+  },
 });
 
 function RouteComponent() {

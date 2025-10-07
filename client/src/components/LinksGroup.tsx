@@ -1,5 +1,5 @@
 import { IconProps } from "@tabler/icons-react";
-import { Badge, NavLink } from "@mantine/core";
+import { ActionIcon, Badge, NavLink, Popover, Tooltip } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { useRouterState } from "@tanstack/react-router";
 import { useMediaQuery } from "@mantine/hooks";
@@ -49,9 +49,7 @@ function LinksGroup({
     ? {
         padding: "11px",
       }
-    : minimized
-      ? { padding: "11px", justifyContent: "center" }
-      : { paddingTop: "5px", paddingBottom: "5px" };
+    : { paddingTop: "5px", paddingBottom: "5px" };
   const isActive =
     link === currentPathname ||
     (link !== "/" && currentPathname.startsWith(link || ""));
@@ -59,6 +57,7 @@ function LinksGroup({
   const hasLinks = Array.isArray(links);
   const items = (hasLinks ? links : []).map((link) => (
     <NavLink
+      my={1}
       component={Link}
       key={link.label}
       to={link.link}
@@ -88,7 +87,7 @@ function LinksGroup({
           </Badge>
         ) : null
       }
-      label={minimized ? null : link.label}
+      label={link.label}
       onClick={() => {
         if (isMobile) {
           closeSidebarOnClick?.();
@@ -104,8 +103,25 @@ function LinksGroup({
         (item.props.to !== "/" && currentPathname.startsWith(item.props.to))
     );
 
-    return (
+    return minimized ? (
+      <Popover width={200} position="right-start" withArrow shadow="md">
+        <Popover.Target>
+          <Tooltip label={label} position="right" withArrow>
+            <ActionIcon
+              className="rounded"
+              variant={isParentActive ? "filled" : "default"}
+              size="xl"
+              my={3}
+            >
+              <Icon size={16} />
+            </ActionIcon>
+          </Tooltip>
+        </Popover.Target>
+        <Popover.Dropdown p={5}>{items}</Popover.Dropdown>
+      </Popover>
+    ) : (
       <NavLink
+        my={1}
         href="#required-for-focus"
         label={minimized ? null : label}
         variant="filled"
@@ -124,8 +140,23 @@ function LinksGroup({
     );
   }
 
-  return (
+  return minimized ? (
+    <Tooltip label={label} position="right" withArrow>
+      <ActionIcon
+        className="rounded"
+        variant={isActive ? "filled" : "default"}
+        size="xl"
+        my={3}
+        component={Link}
+        to={link || "#"}
+        preload="intent"
+      >
+        <Icon size={16} />
+      </ActionIcon>
+    </Tooltip>
+  ) : (
     <AppLink
+      my={1}
       preload="intent"
       to={link}
       className="rounded"

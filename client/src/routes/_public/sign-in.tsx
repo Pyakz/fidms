@@ -97,8 +97,9 @@ function SignIn() {
       <LoadingOverlay
         visible={visible}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
+        overlayProps={{ radius: "sm", blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
       />
+
       <form className="space-y-3 p-5" onSubmit={form.onSubmit(handleSubmit)}>
         <Box>
           <Text fw="bold" size="lg">

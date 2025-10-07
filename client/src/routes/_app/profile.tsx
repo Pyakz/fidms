@@ -15,6 +15,9 @@ export const Route = createFileRoute("/_app/profile")({
     </Center>
   ),
   head: () => ({ meta: [{ title: "Profile" }] }),
+  staticData: {
+    breadcrumbs: [{ order: 1, title: "Profile", to: "#", active: true }],
+  },
 });
 
 function RouteComponent() {

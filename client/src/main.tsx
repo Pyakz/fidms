@@ -31,6 +31,15 @@ declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
+
+  interface StaticDataRouteOption {
+    breadcrumbs?: {
+      order: number;
+      title: string;
+      to: string;
+      active?: boolean;
+    }[];
+  }
 }
 
 const rootElement = document.getElementById("root");

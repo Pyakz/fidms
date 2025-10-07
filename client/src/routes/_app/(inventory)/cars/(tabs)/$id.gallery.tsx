@@ -23,6 +23,16 @@ export const Route = createFileRoute(
       },
     ],
   }),
+  staticData: {
+    breadcrumbs: [
+      {
+        order: 4,
+        title: "Gallery",
+        to: "#",
+        active: true,
+      },
+    ],
+  },
 });
 
 function RouteComponent() {

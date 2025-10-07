@@ -21,6 +21,12 @@ export const Route = createFileRoute("/_app/(inventory)/cars/")({
       },
     ],
   }),
+  staticData: {
+    breadcrumbs: [
+      { order: 1, title: "Inventory", to: "#" },
+      { order: 2, title: "Cars", to: "/cars", active: true },
+    ],
+  },
 });
 
 function RouteComponent() {

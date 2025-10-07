@@ -1,20 +1,20 @@
 import * as React from "react";
 import { createLink, LinkComponent } from "@tanstack/react-router";
-import { NavLinkProps, NavLink } from "@mantine/core";
+import { AnchorProps, Anchor } from "@mantine/core";
 
-type MantineNavLinkProps = Omit<NavLinkProps, "href">;
+type MantineAnchorProps = Omit<AnchorProps, "href">;
 
 const MantineLinkComponent = React.forwardRef<
   HTMLAnchorElement,
-  MantineNavLinkProps
+  MantineAnchorProps
 >((props, ref) => {
-  return <NavLink ref={ref} {...props} />;
+  return <Anchor ref={ref} underline="never" {...props} />;
 });
 
 const CreatedLinkComponent = createLink(MantineLinkComponent);
 
-const AppLink: LinkComponent<typeof MantineLinkComponent> = (props) => (
+const AnchorLink: LinkComponent<typeof MantineLinkComponent> = (props) => (
   <CreatedLinkComponent preload="intent" {...props} />
 );
 
-export default AppLink;
+export default AnchorLink;

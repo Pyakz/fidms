@@ -23,6 +23,11 @@ export const Route = createFileRoute(
       },
     ],
   }),
+  staticData: {
+    breadcrumbs: [
+      { order: 4, title: "Service History", to: "#", active: true },
+    ],
+  },
 });
 
 function RouteComponent() {

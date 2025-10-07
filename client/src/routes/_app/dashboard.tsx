@@ -15,6 +15,9 @@ export const Route = createFileRoute("/_app/dashboard")({
     </Center>
   ),
   head: () => ({ meta: [{ title: "Dashboard - FIDMS" }] }),
+  staticData: {
+    breadcrumbs: [{ order: 1, title: "Dashboard", to: "#", active: true }],
+  },
 });
 
 function RouteComponent() {

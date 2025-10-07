@@ -14,6 +14,9 @@ export const Route = createFileRoute("/_app/(branches)/branches/")({
     </Center>
   ),
   head: () => ({ meta: [{ title: "Branches" }] }),
+  staticData: {
+    breadcrumbs: [{ order: 1, title: "Branches", to: "#", active: true }],
+  },
 });
 
 function RouteComponent() {

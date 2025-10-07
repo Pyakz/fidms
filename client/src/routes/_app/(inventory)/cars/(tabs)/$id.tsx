@@ -7,14 +7,23 @@ export const Route = createFileRoute("/_app/(inventory)/cars/(tabs)/$id")({
   component: RouteComponent,
   loader: async () => {
     await new Promise((r) => setTimeout(r, 5000));
-    return null;
+    return {
+      breadcrumbs: [{ order: 3, title: "2024 Honda Civic", to: "#" }],
+    };
   },
+  notFoundComponent: () => <div>Car Not Found</div>,
   pendingComponent: () => (
     <Center h={FULL_HEIGHT}>
       <Loader />
     </Center>
   ),
   errorComponent: ({ error }) => <div>Error: {String(error)}</div>,
+  staticData: {
+    breadcrumbs: [
+      { order: 1, title: "Inventory", to: "#" },
+      { order: 2, title: "Cars", to: "/cars" },
+    ],
+  },
 });
 
 function RouteComponent() {
