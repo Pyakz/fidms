@@ -25,6 +25,7 @@ import {
   // IconLayoutSidebarLeftCollapse,
   // IconLayoutSidebarLeftExpand,
   IconSelector,
+  IconX,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
 
@@ -229,16 +230,20 @@ function LayoutComponent() {
       </AppShell>
 
       <Affix
-        position={{ bottom: 40, right: 40 }}
+        position={{ bottom: 380, right: 15 }}
         hiddenFrom="sm"
         hidden={!mobileOpened}
       >
-        <Burger
-          opened={mobileOpened}
+        <ActionIcon
+          radius={50}
           onClick={toggleMobile}
-          hiddenFrom="sm"
-          size="sm"
-        />
+          size="xl"
+          variant="gradient"
+          gradient={{ from: "primary", to: "info", deg: 45 }}
+          className="shadow-lg"
+        >
+          <IconX size={20} stroke={1.6} />
+        </ActionIcon>
       </Affix>
     </Fragment>
   );
