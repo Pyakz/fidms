@@ -16,10 +16,8 @@ const queryClient = new QueryClient();
 // Create a new router instance
 const router = createRouter({
   routeTree,
-  context: {
-    queryClient,
-  },
-  defaultPendingMs: 0,
+  context: { queryClient },
+  defaultPendingMs: 100,
 });
 
 router.subscribe("onBeforeLoad", ({ fromLocation, pathChanged }) => {

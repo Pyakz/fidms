@@ -1,7 +1,6 @@
 import {
   createRootRouteWithContext,
   HeadContent,
-  Link,
   Outlet,
 } from "@tanstack/react-router";
 import { TanStackDevtools } from "@tanstack/react-devtools";
@@ -9,19 +8,13 @@ import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { Alert, Center, Loader } from "@mantine/core";
+import PageNotFound from "@/components/PageNotFound";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   component: RootComponent,
-  notFoundComponent: () => {
-    return (
-      <div>
-        <p>This is the notFoundComponent configured on root route</p>
-        <Link to="/">Start Over</Link>
-      </div>
-    );
-  },
+  notFoundComponent: () => <PageNotFound />,
   pendingComponent: () => (
     <Center className="h-screen">
       <Loader />

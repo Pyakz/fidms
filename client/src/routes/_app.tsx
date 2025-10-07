@@ -29,7 +29,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
-import { HEADER_HEIGHT, SIDEBAR_LINKS } from "@/lib/constant";
+import { FULL_HEIGHT, HEADER_HEIGHT, SIDEBAR_LINKS } from "@/lib/constant";
+import PageNotFound from "@/components/PageNotFound";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
@@ -55,6 +56,7 @@ export const Route = createFileRoute("/_app")({
       <Loader />
     </Center>
   ),
+  notFoundComponent: () => <PageNotFound height={FULL_HEIGHT} />,
 });
 
 function LayoutComponent() {
