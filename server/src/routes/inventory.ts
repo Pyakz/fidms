@@ -13,6 +13,7 @@ export const inventory = new Hono()
         id: schema.inventory.id,
         vin: schema.inventory.vin,
       });
+
     return c.json(newInventoryItem);
   })
   .get("/items", (c) => {

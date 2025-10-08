@@ -14,6 +14,7 @@ const app = new Hono()
   .use(trimTrailingSlash())
   .use(poweredBy({ serverName: "FIDMS Server" }))
   .get("/health", (c) => c.json({ status: "ok" }))
+  // .use('*', sentry())
   .route("/api", api);
 
 if (process.env.NODE_ENV === "production") {

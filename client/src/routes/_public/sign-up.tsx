@@ -50,7 +50,7 @@ function SignUp() {
         lastName: values.lastName,
         email: values.email,
         password: values.password,
-        callbackURL: `${window.location.origin}/dashboard`,
+        callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
       },
       {
         onRequest: open,
@@ -74,8 +74,15 @@ function SignUp() {
             }
           }
         },
-        onSuccess: () =>
-          navigate({ to: "/dashboard", reloadDocument: true, replace: true }),
+        onSuccess: (ctx) =>
+          navigate({
+            to: "/sign-in",
+            reloadDocument: true,
+            replace: true,
+            search: {
+              verificationEmailSent: ctx.data?.user?.email || undefined,
+            },
+          }),
       }
     );
 
@@ -144,7 +151,7 @@ function SignUp() {
             signIn.social(
               {
                 provider: "google",
-                callbackURL: `${window.location.origin}/dashboard`,
+                callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
               },
               {
                 onRequest: openGoogle,

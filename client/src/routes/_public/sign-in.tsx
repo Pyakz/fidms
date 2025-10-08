@@ -1,5 +1,6 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
+  Alert,
   Box,
   Button,
   Center,
@@ -19,18 +20,16 @@ import { z } from "zod";
 import { sessionQuery } from "@/lib/queryOptions";
 
 export const Route = createFileRoute("/_public/sign-in")({
-  // check if user is already logged in, if so redirect to dashboard
   beforeLoad: async ({ context: { queryClient } }) => {
     const session = await queryClient.ensureQueryData(sessionQuery);
     if (session.data?.user) {
-      throw redirect({
-        to: "/dashboard",
-      });
+      throw redirect({ to: "/dashboard" });
     }
     return { session };
   },
   validateSearch: z.object({
     redirect: z.string().catch("").optional().nullable(),
+    verificationEmailSent: z.string().catch("").optional().nullable(),
   }),
   component: SignIn,
   head: () => ({
@@ -51,7 +50,7 @@ function SignIn() {
   const [visibleGoogle, { open: openGoogle, close: closeGoogle }] =
     useDisclosure(false);
 
-  const { redirect } = Route.useSearch();
+  const { redirect, verificationEmailSent } = Route.useSearch();
   const form = useForm({
     initialValues: {
       email: "",
@@ -68,7 +67,8 @@ function SignIn() {
       {
         email: values.email,
         password: values.password,
-        callbackURL: redirect || `${window.location.origin}/dashboard`,
+        callbackURL:
+          redirect || `${window.location.origin}/dashboard?tourMode=true`,
       },
       {
         onRequest: open,
@@ -100,7 +100,10 @@ function SignIn() {
         overlayProps={{ radius: "sm", blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
       />
 
-      <form className="space-y-3 p-5" onSubmit={form.onSubmit(handleSubmit)}>
+      <form
+        className="space-y-3 p-5 max-w-md"
+        onSubmit={form.onSubmit(handleSubmit)}
+      >
         <Box>
           <Text fw="bold" size="lg">
             Sign In
@@ -109,6 +112,14 @@ function SignIn() {
             Enter your email below to login to your account
           </Text>
         </Box>
+        {verificationEmailSent && (
+          <Alert color="info" variant="light">
+            A verification email has been sent to{" "}
+            <strong>{verificationEmailSent}</strong>. Please check your inbox
+            and follow the instructions to verify your account.
+          </Alert>
+        )}
+
         <TextInput
           withAsterisk
           leftSection={<IconMail size={15} />}
@@ -159,7 +170,7 @@ function SignIn() {
             )
           }
         >
-          Sign up with Google
+          Sign in with Google
         </Button>
 
         <Text c="dimmed" size="sm" className="text-center">

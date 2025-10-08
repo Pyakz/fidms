@@ -1,4 +1,6 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core";
+import { company } from "./company";
+import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -13,6 +15,10 @@ export const user = pgTable("user", {
     .notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
+  onboarded: boolean("onboarded").default(false),
+  companyId: uuid("company_id")
+    .notNull()
+    .references(() => company.id, { onDelete: "cascade" }),
 });
 
 export const session = pgTable("session", {
@@ -28,6 +34,7 @@ export const session = pgTable("session", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
+  activeOrganizationId: text("active_organization_id"),
 });
 
 export const account = pgTable("account", {
@@ -61,3 +68,56 @@ export const verification = pgTable("verification", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+export const organization = pgTable("organization", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  logo: text("logo"),
+  createdAt: timestamp("created_at").notNull(),
+  metadata: text("metadata"),
+  companyId: uuid("company_id")
+    .notNull()
+    .references(() => company.id, { onDelete: "cascade" }),
+});
+
+export const member = pgTable("member", {
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id")
+    .notNull()
+    .references(() => organization.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  role: text("role").default("member").notNull(),
+  createdAt: timestamp("created_at").notNull(),
+});
+
+export const invitation = pgTable("invitation", {
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id")
+    .notNull()
+    .references(() => organization.id, { onDelete: "cascade" }),
+  email: text("email").notNull(),
+  role: text("role"),
+  status: text("status").default("pending").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  inviterId: text("inviter_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+});
+
+export const organizationRelations = relations(organization, ({ many }) => ({
+  invitations: many(invitation),
+}));
+
+export const invitationRelations = relations(invitation, ({ one }) => ({
+  organization: one(organization, {
+    fields: [invitation.organizationId],
+    references: [organization.id],
+  }),
+  inviter: one(user, {
+    fields: [invitation.inviterId],
+    references: [user.id],
+  }),
+}));

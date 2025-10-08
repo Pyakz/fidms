@@ -36,9 +36,13 @@ import { Fragment } from "react/jsx-runtime";
 import { FULL_HEIGHT, HEADER_HEIGHT, SIDEBAR_LINKS } from "@/lib/constant";
 import PageNotFound from "@/components/PageNotFound";
 import Breadcrumb from "@/components/Breadcrumb";
+import { z } from "zod";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
+  validateSearch: z.object({
+    tourMode: z.boolean().catch(false).optional(),
+  }),
   beforeLoad: async ({ location, context: { queryClient } }) => {
     const session = await queryClient.ensureQueryData(sessionQuery);
     if (!session.data?.user) {
@@ -50,6 +54,13 @@ export const Route = createFileRoute("/_app")({
         },
       });
     }
+
+    // if (session.data.session.activeOrganizationId === null) {
+    //   throw redirect({
+    //     to: "/onboarding",
+    //   });
+    // }
+
     return { session };
   },
   loader: ({ context: { session } }) => {

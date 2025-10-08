@@ -1,3 +1,4 @@
+import { organization } from "@/lib/auth";
 import { FULL_HEIGHT } from "@/lib/constant";
 import { Center, Loader } from "@mantine/core";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -5,8 +6,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/_app/(branches)/branches/")({
   component: RouteComponent,
   loader: async () => {
-    await new Promise((r) => setTimeout(r, 3000));
-    return null;
+    const branches = await organization.list();
+    const full = await organization.listUserInvitations();
+
+    return { branches, full };
   },
   pendingComponent: () => (
     <Center h={FULL_HEIGHT}>
@@ -20,15 +23,23 @@ export const Route = createFileRoute("/_app/(branches)/branches/")({
 });
 
 function RouteComponent() {
+  const { branches, full } = Route.useLoaderData();
   return (
     <div>
-      <Link to="/branches/$id" params={{ id: "1" }} preload="intent">
-        Branch 1
-      </Link>
-      <br />
-      <Link to="/branches/$id" params={{ id: "2" }} preload="intent">
-        Branch 2
-      </Link>
+      <pre>
+        <code>{JSON.stringify(full, null, 2)}</code>
+        {/* <code>{JSON.stringify(full, null, 2)}</code> */}
+      </pre>
+      {branches?.data?.map((branch) => (
+        <Link
+          key={branch.id}
+          to="/branches/$id"
+          params={{ id: branch.id }}
+          preload="intent"
+        >
+          {branch.name}
+        </Link>
+      ))}
     </div>
   );
 }

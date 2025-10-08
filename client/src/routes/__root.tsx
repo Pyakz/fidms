@@ -41,7 +41,7 @@ function RootComponent() {
     <>
       <HeadContent />
       <Outlet />
-      {/* <TanStackDevtools
+      <TanStackDevtools
         eventBusConfig={{ debug: true }}
         plugins={[
           {
@@ -53,7 +53,7 @@ function RootComponent() {
             render: <TanStackRouterDevtoolsPanel />,
           },
         ]}
-      /> */}
+      />
     </>
   );
 }

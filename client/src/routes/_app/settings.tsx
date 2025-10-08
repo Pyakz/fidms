@@ -1,4 +1,4 @@
-import { useSession } from "@/lib/auth";
+import { organization, useSession } from "@/lib/auth";
 import { FULL_HEIGHT } from "@/lib/constant";
 import { Center, Loader } from "@mantine/core";
 import { createFileRoute } from "@tanstack/react-router";
@@ -6,8 +6,11 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/_app/settings")({
   component: RouteComponent,
   loader: async () => {
-    await new Promise((r) => setTimeout(r, 3000));
-    return null;
+    const orgs = await organization.list();
+
+    return {
+      orgs,
+    };
   },
   pendingComponent: () => (
     <Center h={FULL_HEIGHT}>
@@ -29,6 +32,7 @@ export const Route = createFileRoute("/_app/settings")({
 
 function RouteComponent() {
   const { data, isPending, error } = useSession();
+  const { orgs } = Route.useLoaderData();
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -45,7 +49,8 @@ function RouteComponent() {
   return (
     <Center>
       <pre>
-        <code>{JSON.stringify(data?.user, null, 2)}</code>
+        <code>{JSON.stringify(orgs, null, 2)}</code>
+        <code>{JSON.stringify(data, null, 2)}</code>
       </pre>
     </Center>
   );
