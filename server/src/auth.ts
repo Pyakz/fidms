@@ -27,20 +27,20 @@ export const auth = betterAuth({
   appName: "FIDMS",
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    // requireEmailVerification: true,
   },
-  emailVerification: {
-    sendOnSignUp: true,
-    autoSignInAfterVerification: true,
-    sendVerificationEmail: async ({ user, url, token }, request) => {
-      console.log("sendVerificationEmail----------------->", {
-        user,
-        url,
-        token,
-        request,
-      });
-    },
-  },
+  // emailVerification: {
+  //   sendOnSignUp: true,
+  //   autoSignInAfterVerification: true,
+  //   sendVerificationEmail: async ({ user, url, token }, request) => {
+  //     console.log("sendVerificationEmail----------------->", {
+  //       user,
+  //       url,
+  //       token,
+  //       request,
+  //     });
+  //   },
+  // },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_ID as string,

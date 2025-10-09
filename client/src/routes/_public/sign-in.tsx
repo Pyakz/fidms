@@ -101,7 +101,7 @@ function SignIn() {
       />
 
       <form
-        className="space-y-3 p-5 max-w-md"
+        className="space-y-5 p-8 max-w-lg w-lg"
         onSubmit={form.onSubmit(handleSubmit)}
       >
         <Box>
@@ -125,6 +125,7 @@ function SignIn() {
           leftSection={<IconMail size={15} />}
           label="Email"
           required
+          size="md"
           type="email"
           placeholder="mark@example.com"
           {...form.getInputProps("email")}
@@ -134,6 +135,7 @@ function SignIn() {
             withAsterisk
             leftSection={<IconLock size={15} />}
             label="Password"
+            size="md"
             {...form.getInputProps("password")}
           />
           <Link
@@ -145,7 +147,7 @@ function SignIn() {
           </Link>
         </Box>
 
-        <Button fullWidth type="submit" loading={visible}>
+        <Button fullWidth type="submit" size="md" loading={visible}>
           Login
         </Button>
         <Divider label="Or continue with" />
@@ -155,11 +157,13 @@ function SignIn() {
           variant="default"
           leftSection={<GoogleLogo />}
           loading={visibleGoogle}
+          size="md"
           onClick={() =>
             signIn.social(
               {
                 provider: "google",
                 callbackURL: `${window.location.origin}${redirect || "/dashboard"}`,
+                newUserCallbackURL: `${window.location.origin}/setup`,
               },
               {
                 onRequest: openGoogle,

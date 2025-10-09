@@ -1,7 +1,8 @@
 import { Hono } from "hono";
-import inventory from "./inventory";
 import { type AuthType, auth } from "@server/auth";
 import dbClient from "@server/db";
+import company from "./company";
+import inventory from "./inventory";
 
 const api = new Hono<{ Bindings: AuthType }>()
   .on(["POST", "GET"], "/auth/*", (c) => auth.handler(c.req.raw))
@@ -23,6 +24,7 @@ const api = new Hono<{ Bindings: AuthType }>()
 
     return c.json({ invitation: existingInvitation }, 200);
   })
-  .route("/inventory", inventory);
+  .route("/inventory", inventory)
+  .route("/company", company);
 
 export default api;

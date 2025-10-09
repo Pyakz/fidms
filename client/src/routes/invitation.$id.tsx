@@ -20,8 +20,11 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { sessionQuery } from "@/lib/queryOptions";
+import PageNotFound from "@/components/PageNotFound";
+import { FULL_HEIGHT } from "@/lib/constant";
 
 export const Route = createFileRoute("/invitation/$id")({
+  component: RouteComponent,
   loader: async ({ params, context: { queryClient } }) => {
     const session = await queryClient.ensureQueryData(sessionQuery);
     if (session.data?.user) {
@@ -47,12 +50,12 @@ export const Route = createFileRoute("/invitation/$id")({
       throw redirect({ to: "/", statusCode: 400 });
     }
   },
-  component: RouteComponent,
   pendingComponent: () => (
     <Center className="h-screen">
       <Loader />
     </Center>
   ),
+  notFoundComponent: () => <PageNotFound height={FULL_HEIGHT} />,
 });
 
 function RouteComponent() {
@@ -83,7 +86,7 @@ function RouteComponent() {
         lastName: values.lastName,
         email: invitation.email,
         password: values.password,
-        callbackURL: `${window.location.origin}/dashboard`,
+        callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
         companyId: invitation.organization.companyId,
       },
       {
@@ -112,7 +115,14 @@ function RouteComponent() {
         },
         onSuccess: async () => {
           await organization.acceptInvitation({ invitationId: invitation.id });
-          navigate({ to: "/dashboard", reloadDocument: true, replace: true });
+          navigate({
+            to: "/dashboard",
+            reloadDocument: true,
+            replace: true,
+            search: {
+              tourMode: true,
+            },
+          });
         },
       }
     );
@@ -143,7 +153,7 @@ function RouteComponent() {
       />
 
       <form
-        className="space-y-3 p-5 max-w-md"
+        className="space-y-5 p-8 max-w-lg w-lg"
         onSubmit={form.onSubmit(handleSubmit)}
       >
         <Box>
@@ -169,6 +179,7 @@ function RouteComponent() {
             withAsterisk
             label="First Name"
             required
+            size="md"
             placeholder="Mark"
             {...form.getInputProps("firstName")}
           />
@@ -177,6 +188,7 @@ function RouteComponent() {
             withAsterisk
             label="Last Name"
             required
+            size="md"
             placeholder="Doe"
             {...form.getInputProps("lastName")}
           />
@@ -187,9 +199,10 @@ function RouteComponent() {
           required
           leftSection={<IconLock size={15} />}
           label="Password"
+          size="md"
           {...form.getInputProps("password")}
         />
-        <Button fullWidth type="submit" loading={visible} mt="lg">
+        <Button fullWidth type="submit" size="md" loading={visible} mt="lg">
           Accept Invitation
         </Button>
       </form>

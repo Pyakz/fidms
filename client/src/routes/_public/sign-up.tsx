@@ -4,9 +4,9 @@ import {
   Button,
   Center,
   Divider,
-  Group,
   LoadingOverlay,
   PasswordInput,
+  SimpleGrid,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -94,7 +94,10 @@ function SignUp() {
         overlayProps={{ radius: "sm", blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
       />
 
-      <form className="space-y-3 p-5" onSubmit={form.onSubmit(handleSubmit)}>
+      <form
+        className="space-y-5 p-8 max-w-lg w-lg"
+        onSubmit={form.onSubmit(handleSubmit)}
+      >
         <Box>
           <Text fw="bold" size="lg">
             Sign Up
@@ -104,11 +107,12 @@ function SignUp() {
           </Text>
         </Box>
 
-        <Group grow>
+        <SimpleGrid cols={{ base: 1, sm: 2 }}>
           <TextInput
             withAsterisk
             label="First Name"
             required
+            size="md"
             placeholder="Mark"
             {...form.getInputProps("firstName")}
           />
@@ -117,27 +121,30 @@ function SignUp() {
             withAsterisk
             label="Last Name"
             required
+            size="md"
             placeholder="Doe"
             {...form.getInputProps("lastName")}
           />
-        </Group>
+        </SimpleGrid>
 
         <TextInput
           withAsterisk
           leftSection={<IconMail size={15} />}
           label="Email"
           required
+          size="md"
           type="email"
           placeholder="mark@example.com"
           {...form.getInputProps("email")}
         />
         <PasswordInput
           withAsterisk
+          size="md"
           leftSection={<IconLock size={15} />}
           label="Password"
           {...form.getInputProps("password")}
         />
-        <Button fullWidth type="submit" loading={visible}>
+        <Button fullWidth type="submit" size="md" loading={visible}>
           Create Account
         </Button>
         <Divider label="Or continue with" />
@@ -145,6 +152,7 @@ function SignUp() {
         <Button
           fullWidth
           variant="default"
+          size="md"
           leftSection={<GoogleLogo />}
           loading={visibleGoogle}
           onClick={() =>
@@ -152,6 +160,7 @@ function SignUp() {
               {
                 provider: "google",
                 callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
+                newUserCallbackURL: `${window.location.origin}/setup`,
               },
               {
                 onRequest: openGoogle,

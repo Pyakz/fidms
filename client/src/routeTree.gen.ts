@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as SetupRouteImport } from './routes/setup'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
@@ -18,6 +18,7 @@ import { Route as PublicSignUpRouteImport } from './routes/_public/sign-up'
 import { Route as PublicSignInRouteImport } from './routes/_public/sign-in'
 import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
 import { Route as PublicAboutRouteImport } from './routes/_public/about'
+import { Route as AppWelcomeRouteImport } from './routes/_app/welcome'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
@@ -32,9 +33,9 @@ import { Route as AppinventoryCarstabsIdIndexRouteImport } from './routes/_app/(
 import { Route as AppinventoryCarstabsIdServiceHistoryRouteImport } from './routes/_app/(inventory)/cars/(tabs)/$id.service-history'
 import { Route as AppinventoryCarstabsIdGalleryRouteImport } from './routes/_app/(inventory)/cars/(tabs)/$id.gallery'
 
-const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
+const SetupRoute = SetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicRoute = PublicRouteImport.update({
@@ -74,6 +75,11 @@ const PublicAboutRoute = PublicAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => PublicRoute,
+} as any)
+const AppWelcomeRoute = AppWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -148,10 +154,11 @@ const AppinventoryCarstabsIdGalleryRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/onboarding': typeof OnboardingRoute
+  '/setup': typeof SetupRoute
   '/dashboard': typeof AppDashboardRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/welcome': typeof AppWelcomeRoute
   '/about': typeof PublicAboutRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
   '/sign-in': typeof PublicSignInRoute
@@ -170,10 +177,11 @@ export interface FileRoutesByFullPath {
   '/cars/$id/': typeof AppinventoryCarstabsIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/onboarding': typeof OnboardingRoute
+  '/setup': typeof SetupRoute
   '/dashboard': typeof AppDashboardRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/welcome': typeof AppWelcomeRoute
   '/about': typeof PublicAboutRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
   '/sign-in': typeof PublicSignInRoute
@@ -194,10 +202,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
-  '/onboarding': typeof OnboardingRoute
+  '/setup': typeof SetupRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_app/welcome': typeof AppWelcomeRoute
   '/_public/about': typeof PublicAboutRoute
   '/_public/forgot-password': typeof PublicForgotPasswordRoute
   '/_public/sign-in': typeof PublicSignInRoute
@@ -218,10 +227,11 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/onboarding'
+    | '/setup'
     | '/dashboard'
     | '/profile'
     | '/settings'
+    | '/welcome'
     | '/about'
     | '/forgot-password'
     | '/sign-in'
@@ -240,10 +250,11 @@ export interface FileRouteTypes {
     | '/cars/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/onboarding'
+    | '/setup'
     | '/dashboard'
     | '/profile'
     | '/settings'
+    | '/welcome'
     | '/about'
     | '/forgot-password'
     | '/sign-in'
@@ -263,10 +274,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/_public'
-    | '/onboarding'
+    | '/setup'
     | '/_app/dashboard'
     | '/_app/profile'
     | '/_app/settings'
+    | '/_app/welcome'
     | '/_public/about'
     | '/_public/forgot-password'
     | '/_public/sign-in'
@@ -288,17 +300,17 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
-  OnboardingRoute: typeof OnboardingRoute
+  SetupRoute: typeof SetupRoute
   InvitationIdRoute: typeof InvitationIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public': {
@@ -356,6 +368,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/about'
       preLoaderRoute: typeof PublicAboutRouteImport
       parentRoute: typeof PublicRoute
+    }
+    '/_app/welcome': {
+      id: '/_app/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof AppWelcomeRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -474,6 +493,7 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppWelcomeRoute: typeof AppWelcomeRoute
   AppreportsSalesRoute: typeof AppreportsSalesRoute
   AppbranchesBranchesIdRoute: typeof AppbranchesBranchesIdRoute
   AppinventoryMotorcyclesIdRoute: typeof AppinventoryMotorcyclesIdRoute
@@ -487,6 +507,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppWelcomeRoute: AppWelcomeRoute,
   AppreportsSalesRoute: AppreportsSalesRoute,
   AppbranchesBranchesIdRoute: AppbranchesBranchesIdRoute,
   AppinventoryMotorcyclesIdRoute: AppinventoryMotorcyclesIdRoute,
@@ -520,7 +541,7 @@ const PublicRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
-  OnboardingRoute: OnboardingRoute,
+  SetupRoute: SetupRoute,
   InvitationIdRoute: InvitationIdRoute,
 }
 export const routeTree = rootRouteImport
