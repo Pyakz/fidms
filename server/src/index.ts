@@ -14,7 +14,6 @@ const app = new Hono()
   .use(trimTrailingSlash())
   .use(poweredBy({ serverName: "FIDMS Server" }))
   .get("/health", (c) => c.json({ status: "ok" }))
-  // .use('*', sentry())
   .route("/api", api);
 
 if (process.env.NODE_ENV === "production") {
@@ -26,7 +25,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 showRoutes(app);
-export type AppType = typeof api;
+export type ApiType = typeof api;
 
 const server = Bun.serve({
   port: Number(process.env.PORT) || 3000,

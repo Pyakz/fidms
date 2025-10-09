@@ -15,7 +15,6 @@ export const user = pgTable("user", {
     .notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  onboarded: boolean("onboarded").default(false),
   companyId: uuid("company_id")
     .notNull()
     .references(() => company.id, { onDelete: "cascade" }),

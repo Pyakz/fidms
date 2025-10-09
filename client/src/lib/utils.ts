@@ -1,3 +1,3 @@
-import { hcWithType } from "@server/client";
+import { apiWithType } from "@server/client";
 
-export const honoClient = hcWithType(`/api`);
+export const apiClient = apiWithType(`/api`);

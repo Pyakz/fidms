@@ -69,13 +69,6 @@ export const auth = betterAuth({
         required: true,
         returned: true,
       },
-      onboarded: {
-        type: "boolean",
-        required: false,
-        defaultValue: false,
-        returned: true,
-        input: false,
-      },
       companyId: {
         type: "string",
         required: false,

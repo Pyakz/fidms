@@ -1,6 +1,6 @@
 import { organization, signOut, signUp } from "@/lib/auth";
 import { BETTER_AUTH_ERROR_CODES } from "@/lib/enums";
-import { honoClient } from "@/lib/utils";
+import { apiClient } from "@/lib/utils";
 import {
   Alert,
   Box,
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/invitation/$id")({
       await signOut({ fetchOptions: { onSuccess: () => queryClient.clear() } });
     }
     try {
-      const response = await honoClient.invitation[":id"].$get({
+      const response = await apiClient.invitation[":id"].$get({
         param: { id: params.id },
       });
 

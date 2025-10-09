@@ -1,14 +1,26 @@
 import PageNotFound from "@/components/PageNotFound";
+import { organization } from "@/lib/auth";
 import { FULL_HEIGHT } from "@/lib/constant";
 import { sessionQuery } from "@/lib/queryOptions";
-import { Box, Button, Center, Loader, Text, TextInput } from "@mantine/core";
+import { apiClient } from "@/lib/utils";
+import {
+  Box,
+  Button,
+  Center,
+  Loader,
+  LoadingOverlay,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
 import {
   IconArrowRight,
   IconBuilding,
   IconGitBranch,
 } from "@tabler/icons-react";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/setup")({
   component: RouteComponent,
@@ -45,8 +57,8 @@ export const Route = createFileRoute("/setup")({
 
 function RouteComponent() {
   const { session } = Route.useLoaderData();
-  // const navigate = useNavigate();
-  // const [visible, { open, close }] = useDisclosure(false);
+  const navigate = useNavigate();
+  const [visible, { open, close }] = useDisclosure(false);
   const form = useForm({
     initialValues: {
       name: "",
@@ -58,17 +70,54 @@ function RouteComponent() {
     },
   });
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log(values);
+  const handleSubmit = async (values: typeof form.values) => {
+    open();
+
+    try {
+      await Promise.all([
+        apiClient.company.me.$patch({
+          json: { name: values.name },
+        }),
+        organization.create({
+          keepCurrentActiveOrganization: false,
+          name: values.branchName,
+          slug: `${values.branchName
+            .toLowerCase()
+            .replace(
+              /\s+/g,
+              "-"
+            )}-${Math.floor(Math.random() * 1000)}-${Date.now() % 100}`,
+        }),
+      ]);
+
+      navigate({
+        to: "/dashboard",
+        search: {
+          tourMode: true,
+        },
+      });
+    } catch (error: unknown) {
+      console.log((error as { message?: string })?.message);
+
+      showNotification({
+        title: "Failed to Setup Company",
+        message:
+          (error as { message?: string })?.message ||
+          "An error occurred while setting up your company.",
+        color: "red",
+      });
+    } finally {
+      close();
+    }
   };
 
   return (
     <Center className="h-screen">
-      {/* <LoadingOverlay
+      <LoadingOverlay
         visible={visible}
         zIndex={1000}
         overlayProps={{ radius: "sm", blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
-      /> */}
+      />
       <form
         className="space-y-5 p-10 max-w-lg w-lg"
         onSubmit={form.onSubmit(handleSubmit)}
