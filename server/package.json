@@ -13,8 +13,8 @@
     "build": "tsc",
     "dev": "bun run docker:up && bun --watch run src/index.ts && tsc --watch",
     "studio": "bunx drizzle-kit studio",
-    "auth:generate": "bunx @better-auth/cli generate --output ./src/db/schemas/auth.ts",
-    "auth:generate:default": "bunx @better-auth/cli generate",
+    "auth:generate:outputh": "bunx @better-auth/cli generate --output ./src/db/schemas/auth.ts",
+    "auth:generate": "bunx @better-auth/cli generate",
     "auth:migrate": "bunx drizzle-kit migrate"
   },
   "dependencies": {

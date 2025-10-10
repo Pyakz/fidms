@@ -27,6 +27,25 @@ const api = new Hono<{ Variables: AuthType }>()
 
   // Auth Middleware will only work on routes defined after this line
   .use(authMiddleware())
+  .get("/pending-invitations", async (c) => {
+    const pendingInvitations = await dbClient.query.invitation.findMany({
+      where: (invitation, { eq, and }) =>
+        and(
+          eq(invitation.email, c.var.user?.email as string),
+          eq(invitation.status, "pending")
+        ),
+      with: {
+        organization: true,
+        inviter: true,
+      },
+    });
+
+    if (!pendingInvitations) {
+      return c.json({ error: "Invitations not found" }, 404);
+    }
+
+    return c.json({ pendingInvitations }, 200);
+  })
   .route("/inventory", inventory)
   .route("/company", company);
 

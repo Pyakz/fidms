@@ -67,8 +67,7 @@ function SignIn() {
       {
         email: values.email,
         password: values.password,
-        callbackURL:
-          redirect || `${window.location.origin}/dashboard?tourMode=true`,
+        callbackURL: redirect || `${window.location.origin}/dashboard`,
       },
       {
         onRequest: open,

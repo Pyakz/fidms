@@ -20,6 +20,7 @@ import {
   IconBuilding,
   IconGitBranch,
 } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/setup")({
@@ -39,7 +40,6 @@ export const Route = createFileRoute("/setup")({
   loader: ({ context: { session } }) => {
     return { session };
   },
-
   pendingComponent: () => (
     <Center className="h-screen">
       <Loader />
@@ -57,6 +57,7 @@ export const Route = createFileRoute("/setup")({
 
 function RouteComponent() {
   const { session } = Route.useLoaderData();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [visible, { open, close }] = useDisclosure(false);
   const form = useForm({
@@ -72,7 +73,6 @@ function RouteComponent() {
 
   const handleSubmit = async (values: typeof form.values) => {
     open();
-
     try {
       await Promise.all([
         apiClient.company.me.$patch({
@@ -92,10 +92,9 @@ function RouteComponent() {
 
       navigate({
         to: "/dashboard",
-        search: {
-          tourMode: true,
-        },
+        search: { tourMode: true },
       });
+      queryClient.refetchQueries(sessionQuery);
     } catch (error: unknown) {
       console.log((error as { message?: string })?.message);
 
@@ -123,7 +122,9 @@ function RouteComponent() {
         onSubmit={form.onSubmit(handleSubmit)}
       >
         <Box>
-          <h1 className="text-2xl">Welcome, {session.data?.user.firstName}!</h1>
+          <h1 className="text-2xl">
+            Welcome, {session?.data?.user.firstName}!
+          </h1>
           <Text fw="bold" size="lg">
             Final Step: Configure Your Company
           </Text>

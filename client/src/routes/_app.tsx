@@ -1,12 +1,11 @@
 import LinksGroup from "@/components/LinksGroup";
 import ThemeToggler from "@/components/ThemeToggler";
 import { signOut } from "@/lib/auth";
-import { sessionQuery } from "@/lib/queryOptions";
+import { branchInvitationsQuery, sessionQuery } from "@/lib/queryOptions";
 import {
   ActionIcon,
   Affix,
   AppShell,
-  Avatar,
   Box,
   Burger,
   Button,
@@ -15,16 +14,15 @@ import {
   Loader,
   LoadingOverlay,
   ScrollArea,
-  Text,
+  // Text,
+  // TextInput,
   useComputedColorScheme,
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import {
+  // IconGitBranch,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
-  // IconLayoutSidebarLeftCollapse,
-  // IconLayoutSidebarLeftExpand,
-  IconSelector,
   IconX,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
@@ -37,6 +35,9 @@ import { FULL_HEIGHT, HEADER_HEIGHT, SIDEBAR_LINKS } from "@/lib/constant";
 import PageNotFound from "@/components/PageNotFound";
 import Breadcrumb from "@/components/Breadcrumb";
 import { z } from "zod";
+// import { isNotEmpty, useForm } from "@mantine/form";
+// import { showNotification } from "@mantine/notifications";
+import BranchSelector from "@/components/BranchSelector";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
@@ -50,21 +51,29 @@ export const Route = createFileRoute("/_app")({
       throw redirect({
         to: "/sign-in",
         search: {
-          redirect: location.href, // save current location for after login
+          redirect: location.href,
+        },
+      });
+    }
+    const invitations = await queryClient.ensureQueryData(
+      branchInvitationsQuery
+    );
+
+    if (invitations.filter(({ status }) => status === "pending").length > 0) {
+      throw redirect({
+        to: "/invitations",
+        search: {
+          redirect: location.href,
         },
       });
     }
 
-    // if (session.data.session.activeOrganizationId === null) {
-    //   throw redirect({
-    //     to: "/onboarding",
-    //   });
-    // }
-
     return { session };
   },
-  loader: ({ context: { session } }) => {
-    return { session };
+  loader: async ({ context: { session } }) => {
+    return {
+      session,
+    };
   },
   pendingComponent: () => (
     <Center className="h-screen">
@@ -72,6 +81,16 @@ export const Route = createFileRoute("/_app")({
     </Center>
   ),
   notFoundComponent: () => <PageNotFound height={FULL_HEIGHT} />,
+  head: (ctx) => {
+    console.log(ctx);
+    return {
+      meta: [
+        {
+          title: "Setup Company",
+        },
+      ],
+    };
+  },
 });
 
 function LayoutComponent() {
@@ -90,18 +109,18 @@ function LayoutComponent() {
     }
   }, [computedColorScheme]);
 
-  const { session } = Route.useLoaderData();
+  // const { session } = Route.useLoaderData();
   const [
     visibleLoadingDrawer,
     { open: openLoadingDrawer, close: closeLoadingDrawer },
   ] = useDisclosure(false);
   const [mobileOpened, { toggle: toggleMobile, close: closeSideBar }] =
     useDisclosure();
-  // const [minimized, { toggle: toggleMinimized }] = useDisclosure(false);
   const [minimized, setMinimized] = useLocalStorage({
     key: "sidebar-minimized",
     defaultValue: false,
   });
+
   return (
     <Fragment>
       <LoadingOverlay
@@ -168,23 +187,16 @@ function LayoutComponent() {
         </AppShell.Header>
         <AppShell.Navbar>
           <Box p="md" pb={0}>
-            <Group gap={7} align="center" justify="center">
+            <BranchSelector />
+
+            {/* <Group gap={7} align="center" justify="center">
               <Avatar
                 src={session.data?.user.image ?? undefined}
                 name={session.data?.user.name ?? undefined}
                 alt={session.data?.user.name ?? undefined}
                 radius={4}
               />
-              {/* <div style={{ flex: 1 }}>
-                <Text size="xs" fw={500}>
-                  {session.data?.user.firstName} {session.data?.user.lastName}
-                </Text>
 
-                <Text c="dimmed" size="xs">
-                  {session.data?.user.email}
-                </Text>
-              </div>
-              <IconSelector size={16} /> */}
               {!minimized && (
                 <Fragment>
                   <div style={{ flex: 1 }}>
@@ -200,7 +212,7 @@ function LayoutComponent() {
                   <IconSelector size={16} />
                 </Fragment>
               )}
-            </Group>
+            </Group> */}
           </Box>
           <ScrollArea className="flex-1" p="md">
             {SIDEBAR_LINKS.map((item) => (
@@ -259,3 +271,82 @@ function LayoutComponent() {
     </Fragment>
   );
 }
+
+// const CreateBranch = ({
+//   session,
+// }: {
+//   session: ReturnType<typeof Route.useLoaderData>["session"];
+// }) => {
+//   const form = useForm({
+//     initialValues: {
+//       name: "Main Branch",
+//     },
+//     validate: {
+//       name: isNotEmpty("Required"),
+//     },
+//   });
+//   const handleSubmit = async (values: typeof form.values) => {
+//     try {
+//       const activeBranch = await organization.create({
+//         keepCurrentActiveOrganization: false,
+//         name: values.name,
+//         slug: `${values.name
+//           .toLowerCase()
+//           .replace(
+//             /\s+/g,
+//             "-"
+//           )}-${Math.floor(Math.random() * 1000)}-${Date.now() % 100}`,
+//       });
+
+//       if (activeBranch) {
+//         showNotification({
+//           title: "Company Setup Successful",
+//           message: "Your company has been set up successfully.",
+//           color: "green",
+//         });
+//         window.location.reload();
+//       }
+//     } catch (error: unknown) {
+//       console.log((error as { message?: string })?.message);
+//       showNotification({
+//         title: "Failed to Setup Company",
+//         message:
+//           (error as { message?: string })?.message ||
+//           "An error occurred while setting up your company.",
+//         color: "red",
+//       });
+//     } finally {
+//       close();
+//     }
+//   };
+
+//   return (
+//     <form
+//       className="space-y-5 p-10 max-w-lg w-lg"
+//       onSubmit={form.onSubmit(handleSubmit)}
+//     >
+//       <Box>
+//         <h1 className="text-2xl">Welcome, {session.data?.user.firstName}!</h1>
+//         <Text size="lg">
+//           Please create your first branch to get started, if you business only
+//           have one location you can just name it &quot;
+//           <strong>Main Branch</strong>&quot; or any name you prefer.
+//         </Text>
+//       </Box>
+
+//       <TextInput
+//         withAsterisk
+//         label="Branch Name"
+//         leftSection={<IconGitBranch size={16} stroke={1} />}
+//         required
+//         size="md"
+//         placeholder="Downtown Branch"
+//         {...form.getInputProps("name")}
+//       />
+
+//       <Button fullWidth type="submit" mt={25} size="md">
+//         Create Branch
+//       </Button>
+//     </form>
+//   );
+// };

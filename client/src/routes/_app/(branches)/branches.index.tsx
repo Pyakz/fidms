@@ -1,15 +1,16 @@
 import { organization } from "@/lib/auth";
 import { FULL_HEIGHT } from "@/lib/constant";
-import { Center, Loader } from "@mantine/core";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button, Center, Loader, Select, TextInput } from "@mantine/core";
+import { isNotEmpty, useForm } from "@mantine/form";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/(branches)/branches/")({
   component: RouteComponent,
   loader: async () => {
+    const invitations = await organization.listUserInvitations();
     const branches = await organization.list();
-    const full = await organization.listUserInvitations();
 
-    return { branches, full };
+    return { invitations, branches };
   },
   pendingComponent: () => (
     <Center h={FULL_HEIGHT}>
@@ -23,22 +24,80 @@ export const Route = createFileRoute("/_app/(branches)/branches/")({
 });
 
 function RouteComponent() {
-  const { branches, full } = Route.useLoaderData();
+  const { invitations, branches } = Route.useLoaderData();
+
+  const form = useForm({
+    initialValues: {
+      email: "",
+      role: "member",
+      organizationId: "",
+    },
+    validate: {
+      email: isNotEmpty("Required"),
+      role: isNotEmpty("Required"),
+      organizationId: isNotEmpty("Required"),
+    },
+  });
+
+  const onSubmit = async (values: typeof form.values) => {
+    await organization.inviteMember({
+      email: values.email,
+      role: values.role as "admin" | "member" | "owner",
+      organizationId: values.organizationId,
+    });
+  };
+
   return (
     <div>
-      <pre>
-        <code>{JSON.stringify(full, null, 2)}</code>
-        {/* <code>{JSON.stringify(full, null, 2)}</code> */}
-      </pre>
-      {branches?.data?.map((branch) => (
-        <Link
+      <form onSubmit={form.onSubmit(onSubmit)} className="w-lg">
+        <TextInput
+          label="Email"
+          type="email"
+          {...form.getInputProps("email")}
+        />
+
+        <Select
+          label="Role"
+          allowDeselect={false}
+          data={[
+            {
+              value: "member",
+              label: "Member",
+            },
+            {
+              value: "admin",
+              label: "Admin",
+            },
+          ]}
+          {...form.getInputProps("role")}
+        />
+
+        <Select
+          label="Branch"
+          data={
+            branches?.data?.map((branch) => ({
+              value: branch.id,
+              label: branch.name,
+            })) || []
+          }
+          {...form.getInputProps("organizationId")}
+        />
+
+        <Button type="submit" mt="md">
+          Invite
+        </Button>
+      </form>
+
+      {invitations?.data?.map((branch) => (
+        <Button
           key={branch.id}
-          to="/branches/$id"
-          params={{ id: branch.id }}
-          preload="intent"
+          onClick={async () => {
+            await organization.acceptInvitation({ invitationId: branch.id });
+            window.location.reload();
+          }}
         >
-          {branch.name}
-        </Link>
+          {branch.email} accept
+        </Button>
       ))}
     </div>
   );

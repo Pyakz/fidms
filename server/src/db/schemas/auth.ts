@@ -18,6 +18,10 @@ export const user = pgTable("user", {
   companyId: uuid("company_id")
     .notNull()
     .references(() => company.id, { onDelete: "cascade" }),
+  defaultOrganizationId: text("default_organization_id").references(
+    () => organization.id,
+    { onDelete: "set null" }
+  ),
 });
 
 export const session = pgTable("session", {
@@ -108,6 +112,7 @@ export const invitation = pgTable("invitation", {
 
 export const organizationRelations = relations(organization, ({ many }) => ({
   invitations: many(invitation),
+  members: many(member),
 }));
 
 export const invitationRelations = relations(invitation, ({ one }) => ({
@@ -118,5 +123,15 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
   inviter: one(user, {
     fields: [invitation.inviterId],
     references: [user.id],
+  }),
+}));
+
+export const userRelations = relations(user, ({ many, one }) => ({
+  accounts: many(account),
+  sessions: many(session),
+  members: many(member),
+  company: one(company, {
+    fields: [user.companyId],
+    references: [company.id],
   }),
 }));

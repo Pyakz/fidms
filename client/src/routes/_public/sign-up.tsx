@@ -50,7 +50,7 @@ function SignUp() {
         lastName: values.lastName,
         email: values.email,
         password: values.password,
-        callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
+        callbackURL: `${window.location.origin}/setup`,
       },
       {
         onRequest: open,
@@ -159,7 +159,7 @@ function SignUp() {
             signIn.social(
               {
                 provider: "google",
-                callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
+                callbackURL: `${window.location.origin}/dashboard`,
                 newUserCallbackURL: `${window.location.origin}/setup`,
               },
               {

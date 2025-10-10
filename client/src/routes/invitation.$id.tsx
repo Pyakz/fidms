@@ -1,4 +1,4 @@
-import { organization, signOut, signUp } from "@/lib/auth";
+import { signOut, signUp } from "@/lib/auth";
 import { BETTER_AUTH_ERROR_CODES } from "@/lib/enums";
 import { apiClient } from "@/lib/utils";
 import {
@@ -86,7 +86,7 @@ function RouteComponent() {
         lastName: values.lastName,
         email: invitation.email,
         password: values.password,
-        callbackURL: `${window.location.origin}/dashboard?tourMode=true`,
+        callbackURL: `${window.location.origin}/sign-in?verificationEmailSent=${invitation.email}`,
         companyId: invitation.organization.companyId,
       },
       {
@@ -114,13 +114,12 @@ function RouteComponent() {
           }
         },
         onSuccess: async () => {
-          await organization.acceptInvitation({ invitationId: invitation.id });
           navigate({
-            to: "/dashboard",
+            to: "/sign-in",
             reloadDocument: true,
             replace: true,
             search: {
-              tourMode: true,
+              verificationEmailSent: invitation.email,
             },
           });
         },
