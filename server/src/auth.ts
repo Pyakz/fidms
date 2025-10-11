@@ -1,12 +1,16 @@
 import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import dbClient from "./db";
 import { lastLoginMethod, openAPI, organization } from "better-auth/plugins";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+
+import dbClient from "./db";
 import { user } from "./db/schemas/auth";
 import { eq } from "drizzle-orm";
 
 export const auth = betterAuth({
   appName: "FIDMS",
+  database: drizzleAdapter(dbClient, {
+    provider: "pg",
+  }),
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -37,9 +41,6 @@ export const auth = betterAuth({
       },
     },
   },
-  database: drizzleAdapter(dbClient, {
-    provider: "pg",
-  }),
   user: {
     additionalFields: {
       firstName: {
@@ -52,7 +53,6 @@ export const auth = betterAuth({
         required: true,
         returned: true,
       },
-
       defaultOrganizationId: {
         type: "string",
         required: false,
@@ -61,17 +61,9 @@ export const auth = betterAuth({
       },
     },
   },
-  // hooks: {
-  //   before: createAuthMiddleware(async (ctx) => {
-  //     console.log("------- Before Create User Hook -------", ctx);
-  //   }),
-  // },
   databaseHooks: {
     user: {
       create: {
-        before: async (data) => {
-          console.log("------- Before Create User Hook -------", data);
-        },
         after: async (user, ctx) => {
           console.log("------- After Create User Hook -------", user, ctx);
         },
@@ -81,10 +73,10 @@ export const auth = betterAuth({
       create: {
         async before(session) {
           const activeOrganizationId = await dbClient
-            .select({ defaultOrganizationId: user.defaultOrganizationId })
+            .select({ activeOrganizationId: user.defaultOrganizationId })
             .from(user)
             .where(eq(user.id, session.userId))
-            .then((res) => res[0]?.defaultOrganizationId || null);
+            .then((res) => res[0]?.activeOrganizationId || null);
 
           return {
             data: {
@@ -106,16 +98,13 @@ export const auth = betterAuth({
       },
     },
   },
-
   trustedOrigins: ["http://localhost:5173"],
   plugins: [
     openAPI(),
     lastLoginMethod(),
     organization({
-      schema: {},
       organizationHooks: {
-        // beforeCreateOrganization: async ({ organization, user }) => {},
-
+        // set defaultOrganizationId in user table after creating organization
         afterCreateOrganization: async ({
           organization,
           member,

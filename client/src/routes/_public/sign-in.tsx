@@ -11,13 +11,14 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconLock, IconMail } from "@tabler/icons-react";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { signIn } from "@/lib/auth";
 import { BETTER_AUTH_ERROR_CODES } from "@/lib/enums";
 import GoogleLogo from "@/components/GoogleLogo";
 import { useDisclosure } from "@mantine/hooks";
-import { z } from "zod";
 import { sessionQuery } from "@/lib/queryOptions";
+import { z } from "zod/v4";
+import { zod4Resolver } from "mantine-form-zod-resolver";
 
 export const Route = createFileRoute("/_public/sign-in")({
   beforeLoad: async ({ context: { queryClient } }) => {
@@ -56,10 +57,12 @@ function SignIn() {
       email: "",
       password: "",
     },
-    validate: {
-      email: isNotEmpty("Required"),
-      password: isNotEmpty("Required"),
-    },
+    validate: zod4Resolver(
+      z.object({
+        email: z.string().min(1, { message: "Required" }),
+        password: z.string().min(1, { message: "Required" }),
+      })
+    ),
   });
 
   const handleSubmit = (values: typeof form.values) =>
@@ -123,7 +126,6 @@ function SignIn() {
           withAsterisk
           leftSection={<IconMail size={15} />}
           label="Email"
-          required
           size="md"
           type="email"
           placeholder="mark@example.com"
