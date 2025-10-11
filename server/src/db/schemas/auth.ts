@@ -105,7 +105,6 @@ export const invitation = pgTable("invitation", {
 
 export const organizationRelations = relations(organization, ({ many }) => ({
   invitations: many(invitation),
-  members: many(member),
 }));
 
 export const invitationRelations = relations(invitation, ({ one }) => ({
@@ -122,5 +121,5 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
 export const userRelations = relations(user, ({ many }) => ({
   accounts: many(account),
   sessions: many(session),
-  members: many(member),
+  organizations: many(organization),
 }));

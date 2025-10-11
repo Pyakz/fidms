@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { lastLoginMethod, openAPI, organization } from "better-auth/plugins";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
@@ -6,7 +6,7 @@ import dbClient from "./db";
 import { user } from "./db/schemas/auth";
 import { eq } from "drizzle-orm";
 
-export const auth = betterAuth({
+const authConfig = {
   appName: "FIDMS",
   database: drizzleAdapter(dbClient, {
     provider: "pg",
@@ -18,7 +18,6 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    afterVerificationRedirectURL: `/setup`,
     sendVerificationEmail: async ({ user, url, token }, request) => {
       console.log("sendVerificationEmail----------------->", {
         user,
@@ -179,7 +178,11 @@ export const auth = betterAuth({
       },
     }),
   ],
-});
+} satisfies BetterAuthOptions;
+
+export const auth = betterAuth(authConfig) as ReturnType<
+  typeof betterAuth<typeof authConfig>
+>;
 
 export type AuthType = {
   user: typeof auth.$Infer.Session.user | null;
