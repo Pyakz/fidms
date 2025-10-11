@@ -46,9 +46,7 @@ function LinksGroup({
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const root = isMobile
-    ? {
-        padding: "11px",
-      }
+    ? { padding: "12px" }
     : { paddingTop: "5px", paddingBottom: "5px" };
   const isActive =
     link === currentPathname ||
@@ -110,7 +108,7 @@ function LinksGroup({
               mb={4}
               className="rounded"
               variant={isParentActive ? "filled" : "default"}
-              size="xl"
+              size={45}
             >
               <Icon size={16} />
             </ActionIcon>
@@ -143,7 +141,7 @@ function LinksGroup({
       <ActionIcon
         className="rounded"
         variant={isActive ? "filled" : "default"}
-        size="xl"
+        size={45}
         component={Link}
         to={link || "#"}
         preload="intent"

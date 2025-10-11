@@ -3,11 +3,9 @@ import { organization } from "@/lib/auth";
 import { FULL_HEIGHT } from "@/lib/constant";
 import { pendingInvitations, sessionQuery } from "@/lib/queryOptions";
 import {
-  Avatar,
   Box,
   Button,
   Center,
-  Group,
   Loader,
   LoadingOverlay,
   Paper,
@@ -16,6 +14,7 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import moment from "moment";
 import React from "react";
 import { z } from "zod";
 
@@ -30,7 +29,7 @@ export const Route = createFileRoute("/invitations")({
       });
     }
     const invitations = await queryClient.ensureQueryData(pendingInvitations);
-
+    console.log(invitations);
     if (invitations?.pendingInvitations.length === 0) {
       throw redirect({ to: "/dashboard" });
     }
@@ -86,24 +85,13 @@ function RouteComponent() {
         </Box>
 
         {invitations?.pendingInvitations.map((invitation) => (
-          <Paper key={invitation.id} className="p-3 space-y-5" withBorder>
-            <Group align="start" gap={10}>
-              <Avatar
-                color="secondary"
-                name={invitation.inviter.name}
-                alt={invitation.inviter.name}
-                src={invitation.inviter.image ?? undefined}
-                visibleFrom="md"
-                radius={4}
-              />
-
-              <Box>
-                <Text>
-                  <strong>{invitation.inviter.firstName}</strong> invited you to
-                  join <strong>{invitation.organization.name}</strong>
-                </Text>
-              </Box>
-            </Group>
+          <Paper key={invitation.id} className="p-3 text-center" withBorder>
+            <Text mb="lg">
+              <strong>{invitation.inviter.firstName}</strong> invited you to
+              join <strong>{invitation.organization.name}</strong> as their{" "}
+              <strong>{invitation.role}</strong>, this invitation will expire in{" "}
+              <strong>{moment(invitation.expiresAt).format("LLL")}</strong>
+            </Text>
 
             <Button
               disabled={loading}

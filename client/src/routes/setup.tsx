@@ -2,7 +2,6 @@ import PageNotFound from "@/components/PageNotFound";
 import { organization } from "@/lib/auth";
 import { FULL_HEIGHT } from "@/lib/constant";
 import { sessionQuery } from "@/lib/queryOptions";
-import { apiClient } from "@/lib/utils";
 import {
   Box,
   Button,
@@ -15,13 +14,9 @@ import {
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import {
-  IconArrowRight,
-  IconBuilding,
-  IconGitBranch,
-} from "@tabler/icons-react";
+import { IconArrowRight, IconBuilding } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/setup")({
   component: RouteComponent,
@@ -33,6 +28,10 @@ export const Route = createFileRoute("/setup")({
         to: "/sign-in",
         search: { redirect: location.href },
       });
+    }
+
+    if (session.data?.user.defaultOrganizationId) {
+      throw redirect({ to: "/dashboard" });
     }
 
     return { session };
@@ -58,43 +57,31 @@ export const Route = createFileRoute("/setup")({
 function RouteComponent() {
   const { session } = Route.useLoaderData();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [visible, { open, close }] = useDisclosure(false);
   const form = useForm({
     initialValues: {
       name: "",
-      branchName: "",
     },
     validate: {
       name: isNotEmpty("Required"),
-      branchName: isNotEmpty("Required"),
     },
   });
 
   const handleSubmit = async (values: typeof form.values) => {
     open();
     try {
-      await Promise.all([
-        apiClient.company.me.$patch({
-          json: { name: values.name },
-        }),
-        organization.create({
-          keepCurrentActiveOrganization: false,
-          name: values.branchName,
-          slug: `${values.branchName
-            .toLowerCase()
-            .replace(
-              /\s+/g,
-              "-"
-            )}-${Math.floor(Math.random() * 1000)}-${Date.now() % 100}`,
-        }),
-      ]);
-
-      navigate({
-        to: "/dashboard",
-        search: { tourMode: true },
+      await organization.create({
+        keepCurrentActiveOrganization: false,
+        name: values.name,
+        slug: `${values.name
+          .toLowerCase()
+          .replace(
+            /\s+/g,
+            "-"
+          )}-${Math.floor(Math.random() * 1000)}-${Date.now() % 100}`,
       });
       queryClient.refetchQueries(sessionQuery);
+      window.location.reload();
     } catch (error: unknown) {
       console.log((error as { message?: string })?.message);
 
@@ -126,44 +113,22 @@ function RouteComponent() {
             Welcome, {session?.data?.user.firstName}!
           </h1>
           <Text fw="bold" size="lg">
-            Final Step: Configure Your Company
+            Configure Your Company
           </Text>
           <Text c="dimmed" fz="sm">
-            Please provide the primary details for your company and main branch.
+            Please provide the primary details for your company, you can update
+            more later.
           </Text>
         </Box>
 
         <TextInput
           withAsterisk
-          label="Company Name"
           leftSection={<IconBuilding size={16} stroke={1} />}
           required
           size="md"
-          placeholder="Fraxum Luxury Cars"
+          placeholder="Fraxum Dealership"
           {...form.getInputProps("name")}
         />
-
-        <Box>
-          <TextInput
-            withAsterisk
-            label="Branch Name"
-            leftSection={<IconGitBranch size={16} stroke={1} />}
-            required
-            size="md"
-            placeholder="Downtown Branch"
-            {...form.getInputProps("branchName")}
-          />
-          {form.isValid("name") && (
-            <Button
-              mt={4}
-              size="compact-sm"
-              variant="subtle"
-              onClick={() => form.setFieldValue("branchName", form.values.name)}
-            >
-              Same as Company Name
-            </Button>
-          )}
-        </Box>
 
         <Button
           fullWidth

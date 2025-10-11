@@ -87,7 +87,6 @@ function RouteComponent() {
         email: invitation.email,
         password: values.password,
         callbackURL: `${window.location.origin}/sign-in?verificationEmailSent=${invitation.email}`,
-        companyId: invitation.organization.companyId,
       },
       {
         onRequest: open,

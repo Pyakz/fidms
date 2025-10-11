@@ -14,7 +14,6 @@ import {
   lastLoginMethodClient,
   organizationClient,
 } from "better-auth/client/plugins";
-import { company } from "./db/schemas/company";
 import { user } from "./db/schemas/auth";
 import { eq } from "drizzle-orm";
 
@@ -74,12 +73,7 @@ export const auth = betterAuth({
         required: true,
         returned: true,
       },
-      companyId: {
-        type: "string",
-        required: false,
-        returned: true,
-        input: true,
-      },
+
       defaultOrganizationId: {
         type: "string",
         required: false,
@@ -88,54 +82,16 @@ export const auth = betterAuth({
       },
     },
   },
-  hooks: {
-    before: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === "/sign-up/email") {
-        const newCompany = await dbClient
-          .insert(company)
-          .values({})
-          .returning({ id: company.id });
-
-        if (!newCompany[0]?.id) {
-          throw new APIError("BAD_REQUEST", {
-            code: "FAILED_TO_CREATE_USER",
-            message: "Unable to create account, please contact support.",
-          });
-        }
-
-        return {
-          context: {
-            ...ctx,
-            body: {
-              ...ctx.body,
-              companyId: newCompany[0]?.id,
-            },
-          },
-        };
-      }
-    }),
-  },
+  // hooks: {
+  //   before: createAuthMiddleware(async (ctx) => {
+  //     console.log("------- Before Create User Hook -------", ctx);
+  //   }),
+  // },
   databaseHooks: {
     user: {
       create: {
         before: async (data) => {
-          if (!data.companyId) {
-            const newCompany = await dbClient
-              .insert(company)
-              .values({})
-              .returning({ id: company.id });
-
-            if (!newCompany[0]?.id) {
-              throw new APIError("BAD_REQUEST", {
-                code: "FAILED_TO_CREATE_USER",
-                message: "Unable to create account, please contact support.",
-              });
-            }
-
-            data.companyId = newCompany[0]?.id;
-          }
-
-          return { data };
+          console.log("------- Before Create User Hook -------", data);
         },
         after: async (user, ctx) => {
           console.log("------- After Create User Hook -------", user, ctx);
@@ -146,10 +102,10 @@ export const auth = betterAuth({
       create: {
         async before(session) {
           const activeOrganizationId = await dbClient
-            .select({ activeOrganizationId: user.defaultOrganizationId })
+            .select({ defaultOrganizationId: user.defaultOrganizationId })
             .from(user)
             .where(eq(user.id, session.userId))
-            .then((res) => res[0]?.activeOrganizationId || null);
+            .then((res) => res[0]?.defaultOrganizationId || null);
 
           return {
             data: {
@@ -177,30 +133,10 @@ export const auth = betterAuth({
     openAPI(),
     lastLoginMethod(),
     organization({
-      schema: {
-        organization: {
-          additionalFields: {
-            companyId: {
-              type: "string",
-              required: false,
-              returned: true,
-              input: false,
-              defaultValue: null,
-            },
-          },
-        },
-      },
+      schema: {},
       organizationHooks: {
-        beforeCreateOrganization: async ({ organization, user }) => {
-          return {
-            data: {
-              ...organization,
-              companyId: user?.companyId || null,
-            },
-          };
-        },
+        // beforeCreateOrganization: async ({ organization, user }) => {},
 
-        // set defaultOrganizationId in user table after creating organization
         afterCreateOrganization: async ({
           organization,
           member,

@@ -1,34 +1,43 @@
 import LinksGroup from "@/components/LinksGroup";
-import ThemeToggler from "@/components/ThemeToggler";
-import { signOut } from "@/lib/auth";
+import { organization, signOut } from "@/lib/auth";
 import { branchInvitationsQuery, sessionQuery } from "@/lib/queryOptions";
 import {
   ActionIcon,
-  Affix,
   AppShell,
+  Avatar,
   Box,
   Burger,
-  Button,
   Center,
   Group,
   Loader,
   LoadingOverlay,
+  Menu,
+  Paper,
   ScrollArea,
-  // Text,
-  // TextInput,
+  Text,
   useComputedColorScheme,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import {
-  // IconGitBranch,
+  IconDotsVertical,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
+  IconLogout,
+  IconMoon,
+  IconSun,
+  IconUser,
   IconX,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
 import { FULL_HEIGHT, HEADER_HEIGHT, SIDEBAR_LINKS } from "@/lib/constant";
@@ -38,6 +47,9 @@ import { z } from "zod";
 // import { isNotEmpty, useForm } from "@mantine/form";
 // import { showNotification } from "@mantine/notifications";
 import BranchSelector from "@/components/BranchSelector";
+import { startCase } from "lodash";
+import GlobalSearch from "@/components/GlobalSearch";
+import ThemeToggler from "@/components/ThemeToggler";
 
 export const Route = createFileRoute("/_app")({
   component: LayoutComponent,
@@ -55,6 +67,7 @@ export const Route = createFileRoute("/_app")({
         },
       });
     }
+
     const invitations = await queryClient.ensureQueryData(
       branchInvitationsQuery
     );
@@ -68,11 +81,23 @@ export const Route = createFileRoute("/_app")({
       });
     }
 
+    if (!session.data?.user.defaultOrganizationId) {
+      throw redirect({
+        to: "/setup",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+
     return { session };
   },
   loader: async ({ context: { session } }) => {
+    const role = await organization.getActiveMemberRole();
+
     return {
       session,
+      role,
     };
   },
   pendingComponent: () => (
@@ -94,6 +119,7 @@ export const Route = createFileRoute("/_app")({
 });
 
 function LayoutComponent() {
+  const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
   });
@@ -109,13 +135,15 @@ function LayoutComponent() {
     }
   }, [computedColorScheme]);
 
-  // const { session } = Route.useLoaderData();
+  const { session, role } = Route.useLoaderData();
   const [
     visibleLoadingDrawer,
     { open: openLoadingDrawer, close: closeLoadingDrawer },
   ] = useDisclosure(false);
+
   const [mobileOpened, { toggle: toggleMobile, close: closeSideBar }] =
     useDisclosure();
+
   const [minimized, setMinimized] = useLocalStorage({
     key: "sidebar-minimized",
     defaultValue: false,
@@ -182,39 +210,31 @@ function LayoutComponent() {
               hiddenFrom="sm"
               size="sm"
             />
-            <ThemeToggler />
+            <Group>
+              <GlobalSearch />
+              <ThemeToggler />
+            </Group>
           </Group>
         </AppShell.Header>
         <AppShell.Navbar>
-          <Box p="md" pb={0}>
+          <Box
+            p="xs"
+            pb={0}
+            className="flex items-center gap-x-2 justify-center"
+          >
             <BranchSelector />
-
-            {/* <Group gap={7} align="center" justify="center">
-              <Avatar
-                src={session.data?.user.image ?? undefined}
-                name={session.data?.user.name ?? undefined}
-                alt={session.data?.user.name ?? undefined}
-                radius={4}
-              />
-
-              {!minimized && (
-                <Fragment>
-                  <div style={{ flex: 1 }}>
-                    <Text size="xs" fw={500}>
-                      {session.data?.user.firstName}{" "}
-                      {session.data?.user.lastName}
-                    </Text>
-
-                    <Text c="dimmed" size="xs">
-                      {session.data?.user.email}
-                    </Text>
-                  </div>
-                  <IconSelector size={16} />
-                </Fragment>
-              )}
-            </Group> */}
+            <ActionIcon
+              radius={4}
+              hiddenFrom="sm"
+              variant="default"
+              size="lg"
+              onClick={toggleMobile}
+            >
+              <IconX size={20} stroke={1.6} />
+            </ActionIcon>
           </Box>
-          <ScrollArea className="flex-1" p="md">
+
+          <ScrollArea className="flex-1 text-center" p="xs">
             {SIDEBAR_LINKS.map((item) => (
               <LinksGroup
                 {...item}
@@ -224,129 +244,102 @@ function LayoutComponent() {
               />
             ))}
           </ScrollArea>
-          <div className="p-3">
-            <Button
-              fullWidth
-              onClick={() =>
-                signOut({
-                  fetchOptions: {
-                    onRequest: openLoadingDrawer,
-                    onError: closeLoadingDrawer,
-                    onSuccess: () => {
-                      close();
-                      queryClient.clear();
-                      navigate({
-                        to: "/sign-in",
-                      });
+          <Menu
+            position={minimized ? "right-end" : "top"}
+            arrowPosition="center"
+            width={260}
+            withArrow
+            shadow="lg"
+          >
+            <Menu.Target>
+              <Box p={minimized ? "md" : "xs"} className="flex justify-center">
+                {minimized ? (
+                  <Avatar
+                    src={session.data?.user.image}
+                    name={session?.data?.user.name}
+                    radius={4}
+                    className="rounded cursor-pointer"
+                    variant="light"
+                    size={45}
+                  />
+                ) : (
+                  <Paper className="w-full cursor-pointer" withBorder>
+                    <Group gap={8} className="p-1.5 rounded">
+                      <Avatar
+                        src={session.data?.user.image}
+                        name={session?.data?.user.name}
+                        radius={4}
+                      />
+
+                      <div style={{ flex: 1 }}>
+                        <Text size="sm" fw={500}>
+                          {startCase(session.data?.user.name)}
+                        </Text>
+
+                        <Text c="dimmed" size="xs">
+                          {startCase(role.data?.role)}
+                        </Text>
+                      </div>
+
+                      <IconDotsVertical size={14} className="mr-1" />
+                    </Group>
+                  </Paper>
+                )}
+              </Box>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item
+                leftSection={
+                  computedColorScheme === "light" ? (
+                    <IconMoon size={14} />
+                  ) : (
+                    <IconSun size={14} />
+                  )
+                }
+                onClick={() =>
+                  setColorScheme(
+                    computedColorScheme === "light" ? "dark" : "light"
+                  )
+                }
+              >
+                {computedColorScheme === "light" ? "Dark Mode" : "Light Mode"}
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<IconUser size={14} />}
+                component={Link}
+                to="/profile"
+                preload="intent"
+              >
+                Profile
+              </Menu.Item>
+              <Menu.Item
+                color="red"
+                leftSection={<IconLogout size={14} />}
+                onClick={() =>
+                  signOut({
+                    fetchOptions: {
+                      onRequest: openLoadingDrawer,
+                      onError: closeLoadingDrawer,
+                      onSuccess: () => {
+                        close();
+                        queryClient.clear();
+                        navigate({
+                          to: "/sign-in",
+                        });
+                      },
                     },
-                  },
-                })
-              }
-            >
-              Logout
-            </Button>
-          </div>
+                  })
+                }
+              >
+                Logout
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </AppShell.Navbar>
         <AppShell.Main>
           <Outlet />
         </AppShell.Main>
       </AppShell>
-
-      <Affix
-        position={{ bottom: 380, right: 15 }}
-        hiddenFrom="sm"
-        hidden={!mobileOpened}
-      >
-        <ActionIcon
-          radius={50}
-          onClick={toggleMobile}
-          size="xl"
-          variant="gradient"
-          gradient={{ from: "primary", to: "info", deg: 45 }}
-          className="shadow-lg"
-        >
-          <IconX size={20} stroke={1.6} />
-        </ActionIcon>
-      </Affix>
     </Fragment>
   );
 }
-
-// const CreateBranch = ({
-//   session,
-// }: {
-//   session: ReturnType<typeof Route.useLoaderData>["session"];
-// }) => {
-//   const form = useForm({
-//     initialValues: {
-//       name: "Main Branch",
-//     },
-//     validate: {
-//       name: isNotEmpty("Required"),
-//     },
-//   });
-//   const handleSubmit = async (values: typeof form.values) => {
-//     try {
-//       const activeBranch = await organization.create({
-//         keepCurrentActiveOrganization: false,
-//         name: values.name,
-//         slug: `${values.name
-//           .toLowerCase()
-//           .replace(
-//             /\s+/g,
-//             "-"
-//           )}-${Math.floor(Math.random() * 1000)}-${Date.now() % 100}`,
-//       });
-
-//       if (activeBranch) {
-//         showNotification({
-//           title: "Company Setup Successful",
-//           message: "Your company has been set up successfully.",
-//           color: "green",
-//         });
-//         window.location.reload();
-//       }
-//     } catch (error: unknown) {
-//       console.log((error as { message?: string })?.message);
-//       showNotification({
-//         title: "Failed to Setup Company",
-//         message:
-//           (error as { message?: string })?.message ||
-//           "An error occurred while setting up your company.",
-//         color: "red",
-//       });
-//     } finally {
-//       close();
-//     }
-//   };
-
-//   return (
-//     <form
-//       className="space-y-5 p-10 max-w-lg w-lg"
-//       onSubmit={form.onSubmit(handleSubmit)}
-//     >
-//       <Box>
-//         <h1 className="text-2xl">Welcome, {session.data?.user.firstName}!</h1>
-//         <Text size="lg">
-//           Please create your first branch to get started, if you business only
-//           have one location you can just name it &quot;
-//           <strong>Main Branch</strong>&quot; or any name you prefer.
-//         </Text>
-//       </Box>
-
-//       <TextInput
-//         withAsterisk
-//         label="Branch Name"
-//         leftSection={<IconGitBranch size={16} stroke={1} />}
-//         required
-//         size="md"
-//         placeholder="Downtown Branch"
-//         {...form.getInputProps("name")}
-//       />
-
-//       <Button fullWidth type="submit" mt={25} size="md">
-//         Create Branch
-//       </Button>
-//     </form>
-//   );
-// };

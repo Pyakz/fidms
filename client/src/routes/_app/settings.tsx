@@ -6,7 +6,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/_app/settings")({
   component: RouteComponent,
   loader: async () => {
-    const orgs = await organization.list();
+    const orgs = await organization.getActiveMemberRole();
 
     return {
       orgs,

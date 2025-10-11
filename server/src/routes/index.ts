@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { type AuthType, auth } from "@server/auth";
 import dbClient from "@server/db";
-import company from "./company";
 import inventory from "./inventory";
 import authMiddleware from "@server/middlewares/auth";
 
@@ -46,7 +45,6 @@ const api = new Hono<{ Variables: AuthType }>()
 
     return c.json({ pendingInvitations }, 200);
   })
-  .route("/inventory", inventory)
-  .route("/company", company);
+  .route("/inventory", inventory);
 
 export default api;

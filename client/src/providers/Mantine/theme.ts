@@ -29,6 +29,7 @@ import {
   Timeline,
   Tooltip,
 } from "@mantine/core";
+import "../../styles/theme.css";
 
 const CONTAINER_SIZES: Record<string, string> = {
   xxs: rem("200px"),
@@ -933,7 +934,17 @@ export const appTheme: MantineThemeOverride = createTheme({
     }),
     Paper: Paper.extend({
       defaultProps: {
-        shadow: "xl",
+        shadow: "xs",
+      },
+      styles: (theme) => {
+        return {
+          root: {
+            backgroundColor:
+              theme.primaryColor === "rose" || theme.primaryColor === "green"
+                ? "var(--mantine-color-secondary-filled)"
+                : undefined,
+          },
+        };
       },
     }),
   },

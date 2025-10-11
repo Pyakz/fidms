@@ -5,8 +5,8 @@ const dbClient = drizzle({
   connection: {
     connectionString: process.env.DATABASE_URL!,
   },
-  schema: schema,
   logger: true,
+  schema,
 });
 
 export default dbClient;

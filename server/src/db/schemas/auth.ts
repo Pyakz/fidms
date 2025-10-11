@@ -1,5 +1,4 @@
 import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core";
-import { company } from "./company";
 import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
@@ -15,9 +14,6 @@ export const user = pgTable("user", {
     .notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  companyId: uuid("company_id")
-    .notNull()
-    .references(() => company.id, { onDelete: "cascade" }),
   defaultOrganizationId: text("default_organization_id").references(
     () => organization.id,
     { onDelete: "set null" }
@@ -79,9 +75,6 @@ export const organization = pgTable("organization", {
   logo: text("logo"),
   createdAt: timestamp("created_at").notNull(),
   metadata: text("metadata"),
-  companyId: uuid("company_id")
-    .notNull()
-    .references(() => company.id, { onDelete: "cascade" }),
 });
 
 export const member = pgTable("member", {
@@ -126,12 +119,8 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
   }),
 }));
 
-export const userRelations = relations(user, ({ many, one }) => ({
+export const userRelations = relations(user, ({ many }) => ({
   accounts: many(account),
   sessions: many(session),
   members: many(member),
-  company: one(company, {
-    fields: [user.companyId],
-    references: [company.id],
-  }),
 }));
