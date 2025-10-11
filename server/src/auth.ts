@@ -2,24 +2,8 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import dbClient from "./db";
 import { lastLoginMethod, openAPI, organization } from "better-auth/plugins";
-import { createAuthClient } from "better-auth/client";
-import {
-  customSessionClient,
-  inferAdditionalFields,
-  lastLoginMethodClient,
-  organizationClient,
-} from "better-auth/client/plugins";
 import { user } from "./db/schemas/auth";
 import { eq } from "drizzle-orm";
-
-export const authClient = createAuthClient({
-  plugins: [
-    customSessionClient<typeof auth>(),
-    inferAdditionalFields<typeof auth>(),
-    lastLoginMethodClient(),
-    organizationClient(),
-  ],
-});
 
 export const auth = betterAuth({
   appName: "FIDMS",
