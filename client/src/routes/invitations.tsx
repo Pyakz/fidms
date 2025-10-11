@@ -71,7 +71,7 @@ function RouteComponent() {
       <LoadingOverlay
         visible={loading}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
+        overlayProps={{ blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
       />
 
       <div className="space-y-5 p-5 max-w-lg">

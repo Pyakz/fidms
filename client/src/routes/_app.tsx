@@ -154,7 +154,7 @@ function LayoutComponent() {
       <LoadingOverlay
         visible={visibleLoadingDrawer}
         zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
+        overlayProps={{ blur: 2, color: "rgba(0, 0, 0, 0.25)" }}
       />
 
       <AppShell

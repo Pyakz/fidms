@@ -1,12 +1,7 @@
-import { APIError, betterAuth } from "better-auth";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import dbClient from "./db";
-import {
-  createAuthMiddleware,
-  lastLoginMethod,
-  openAPI,
-  organization,
-} from "better-auth/plugins";
+import { lastLoginMethod, openAPI, organization } from "better-auth/plugins";
 import { createAuthClient } from "better-auth/client";
 import {
   customSessionClient,
